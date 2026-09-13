@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Refunds &amp; Disputes — Grunndubh</title>
+<meta name="description" content="Grunndubh refunds and disputes policy." />
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          ivory: "#F7F3EC",
+          softwhite: "#FDFCFA",
+          sandlight: "#F0E8D9",
+          sand: "#E7DBC6",
+          coffeelight: "#8A6E52",
+          coffee: "#5C4430",
+          coffeedark: "#3B2B1E",
+          goldpale: "#EDE1CC",
+          goldlight: "#C7A776",
+          gold: "#AD8A54",
+          golddeep: "#96763F",
+          heatherpale: "#E8D7D6",
+          heathermauve: "#884F57",
+          success: "#6B6A3C",
+          notice: "#AD8A54",
+          error: "#884F57",
+        },
+        fontFamily: {
+          serif: ["Fraunces", "serif"],
+          sans: ["Inter", "sans-serif"],
+        },
+      },
+    },
+  };
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&display=swap"
+  rel="stylesheet"
+/>
+<link rel="stylesheet" href="assets/css/styles.css" />
+<script>
+  function imgFallback(el) {
+    el.style.display = "none";
+    if (el.nextElementSibling) el.nextElementSibling.style.display = "flex";
+  }
+</script>
+</head>
+
+<body class="bg-ivory text-coffee antialiased">
+  <header class="bg-ivory">
+    <div class="max-w-3xl mx-auto px-6 lg:px-8 h-20 flex items-center justify-between">
+      <a href="index.html" class="font-serif text-2xl text-coffeedark tracking-wide">Grunndubh</a>
+      <div class="flex items-center gap-1 text-sm" role="group" aria-label="Language">
+        <button type="button" data-lang-btn="en" class="px-1.5 py-1 text-coffeedark font-medium" aria-pressed="true">EN</button>
+        <span class="text-sandlight">/</span>
+        <button type="button" data-lang-btn="cz" class="px-1.5 py-1 text-coffeelight" aria-pressed="false">CZ</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-3xl mx-auto px-6 lg:px-8 py-16">
+    <a href="index.html" class="text-sm text-coffeelight hover:text-coffeedark" data-i18n="common.backHome">Back to Grunndubh</a>
+
+    <h1 class="font-serif text-4xl text-coffeedark mt-6 mb-8" data-i18n="policies.refunds.title">Refunds &amp; disputes</h1>
+
+    <div class="space-y-5 text-coffee leading-relaxed [&>p]:mb-0" data-i18n-html="policies.refunds.body"></div>
+  </main>
+
+  <footer class="bg-coffeedark text-goldpale">
+    <div class="max-w-3xl mx-auto px-6 lg:px-8 py-10 flex flex-wrap items-center justify-between gap-4">
+      <p class="font-serif text-xl text-softwhite">Grunndubh</p>
+      <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+        <a href="returns.html" class="hover:text-softwhite" data-i18n="footer.policies.returns">Returns</a>
+        <a href="refunds.html" class="hover:text-softwhite" data-i18n="footer.policies.refunds">Refunds &amp; Disputes</a>
+        <a href="terms.html" class="hover:text-softwhite" data-i18n="footer.policies.terms">Terms &amp; Conditions</a>
+        <a href="privacy.html" class="hover:text-softwhite" data-i18n="footer.policies.privacy">Privacy Policy</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
