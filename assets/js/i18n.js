@@ -323,7 +323,7 @@ const PRODUCTS = [
   },
   {
     id: "obsidian",
-    image: "assets/images/product-obsidian.jpg",
+    image: "assets/images/product-obsidian.png",
     price: null,
     status: "made-to-order",
   },
