@@ -315,16 +315,13 @@ const translations = {
  * price: fill in as a plain string (e.g. "1 200 K\u010d") once pricing is set.
  */
 const PRODUCTS = [
-  {
-    id: "speckled-ivory",
-    image: "assets/images/product-speckled-ivory.jpg",
-    price: null,
-    status: "in-stock",
-  },
+  // "speckled-ivory" temporarily removed — no product photo yet.
+  // Re-add once a photo exists at assets/images/product-speckled-ivory.jpg:
+  // { id: "speckled-ivory", image: "assets/images/product-speckled-ivory.jpg", price: null, status: "in-stock" },
   {
     id: "obsidian",
     image: "assets/images/product-obsidian.png",
-    price: null,
+    price: "420 Kč",
     status: "made-to-order",
   },
 ];

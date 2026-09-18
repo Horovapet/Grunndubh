@@ -13,6 +13,11 @@ function renderProducts(lang) {
   const grid = document.getElementById("shop-grid");
   if (!grid) return;
 
+  // Center a lone card instead of leaving an empty second column.
+  grid.classList.toggle("sm:grid-cols-2", PRODUCTS.length > 1);
+  grid.classList.toggle("max-w-sm", PRODUCTS.length === 1);
+  grid.classList.toggle("mx-auto", PRODUCTS.length === 1);
+
   grid.innerHTML = PRODUCTS.map((product) => {
     const copy = translations[lang].products[product.id];
     const statusLabel = t(`shop.status.${product.status}`, lang);
