@@ -166,7 +166,8 @@ function syncCard(card) {
     ? row(translations[lang].products[id].name, money(item, cur)) +
       row(t("shop.ship.deliveryLabel", lang), money(method[cur], cur)) +
       row(t("shop.ship.totalLabel", lang), money(item + method[cur], cur), "mt-1 pt-2 border-t border-[#E7DBC6] font-medium text-[#3B2B1E]") +
-      (method.pickup ? "" : `<p class="text-xs text-[#8A6E52] mt-2">${t("shop.ship.addressNote", lang)}</p>`)
+      (method.pickup ? "" : `<p class="text-xs text-[#8A6E52] mt-2">${t("shop.ship.addressNote", lang)}</p>`) +
+      `<p class="text-xs text-[#8A6E52] mt-2">${t("shop.ship.dispatch", lang).replace("{days}", SHIPPING.dispatchDays)}</p>`
     : "";
 
   card.querySelector('[data-action="consent"]').checked = state.consent;
@@ -337,34 +338,49 @@ function initScrollAnimations() {
   items.forEach((el) => observer.observe(el));
 }
 
-function initNewsletterForm() {
-  const form = document.getElementById("newsletter-form");
+// Newsletter and contact forms post to the Cloudflare functions in functions/api/.
+function initApiForm(formId, endpoint, section) {
+  const form = document.getElementById(formId);
   if (!form) return;
+  const status = form.querySelector('[data-role="status"]');
+  const button = form.querySelector('button[type="submit"]');
 
-  form.addEventListener("submit", (event) => {
+  const show = (key, ok) => {
+    status.setAttribute("data-i18n", `${section}.${key}`);
+    status.textContent = t(`${section}.${key}`, getLang());
+    status.className = "text-sm mt-3 min-h-[1.25rem] " + (ok === false ? "text-[#884F57]" : ok ? "text-[#6B6A3C]" : "text-[#8A6E52]");
+  };
+
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
-    // TODO(newsletter): send the submitted email to your list provider
-    // (e.g. Mailchimp, Buttondown, a Cloudflare Worker + KV, etc).
-    // No backend is wired up yet \u2014 this is a front-end stub only.
-    const emailInput = form.querySelector("input[type=email]");
-    console.log("Newsletter signup (not yet wired up):", emailInput ? emailInput.value : null);
-    form.reset();
+    const data = Object.fromEntries(new FormData(form).entries());
+    if (form.elements.consent) data.consent = form.elements.consent.checked;
+    data.lang = getLang();
+    button.disabled = true;
+    show("sending");
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) throw new Error("request_failed");
+      form.reset();
+      show("success", true);
+    } catch (e) {
+      show("error", false);
+    } finally {
+      button.disabled = false;
+    }
   });
 }
 
-function initContactForm() {
-  const form = document.getElementById("contact-form");
-  if (!form) return;
+function initNewsletterForm() {
+  initApiForm("newsletter-form", "/api/newsletter", "newsletter");
+}
 
-  form.addEventListener("submit", (event) => {
-    event.preventDefault();
-    // TODO(contact): send this submission somewhere (e.g. a Cloudflare
-    // Pages Function, Formspree, or an email API). No backend is wired
-    // up yet \u2014 this is a front-end stub only.
-    const data = Object.fromEntries(new FormData(form).entries());
-    console.log("Contact form submission (not yet wired up):", data);
-    form.reset();
-  });
+function initContactForm() {
+  initApiForm("contact-form", "/api/contact", "contact");
 }
 
 document.addEventListener("DOMContentLoaded", () => {

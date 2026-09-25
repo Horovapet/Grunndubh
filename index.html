@@ -269,24 +269,35 @@
         Occasional notes on new pieces and restocks. No noise.
       </p>
 
-      <!-- TODO(newsletter): point this form at your list provider; see initNewsletterForm() in assets/js/main.js -->
-      <form id="newsletter-form" class="mt-8 flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto">
-        <label for="newsletter-email" class="sr-only" data-i18n="newsletter.placeholder">Your email address</label>
-        <input
-          id="newsletter-email"
-          type="email"
-          required
-          data-i18n-placeholder="newsletter.placeholder"
-          placeholder="Your email address"
-          class="flex-1 px-5 py-3 rounded-full border border-sand bg-softwhite text-coffee placeholder-coffeelight/70 focus:outline-none focus:ring-1 focus:ring-gold"
-        />
-        <button
-          type="submit"
-          class="px-8 py-3 rounded-full bg-coffeedark text-softwhite text-sm tracking-wide uppercase hover:bg-coffee transition-colors"
-          data-i18n="newsletter.button"
-        >
-          Subscribe
-        </button>
+      <form id="newsletter-form" class="mt-8 max-w-md mx-auto text-left">
+        <div class="flex flex-col sm:flex-row gap-3">
+          <label for="newsletter-email" class="sr-only" data-i18n="newsletter.placeholder">Your email address</label>
+          <input
+            id="newsletter-email"
+            name="email"
+            type="email"
+            required
+            data-i18n-placeholder="newsletter.placeholder"
+            placeholder="Your email address"
+            class="flex-1 px-5 py-3 rounded-full border border-sand bg-softwhite text-coffee placeholder-coffeelight/70 focus:outline-none focus:ring-1 focus:ring-gold"
+          />
+          <button
+            type="submit"
+            class="px-8 py-3 rounded-full bg-coffeedark text-softwhite text-sm tracking-wide uppercase hover:bg-coffee transition-colors disabled:opacity-60"
+            data-i18n="newsletter.button"
+          >
+            Subscribe
+          </button>
+        </div>
+        <label class="flex items-start gap-2 mt-4 text-sm text-coffeelight cursor-pointer">
+          <input type="checkbox" name="consent" required class="mt-0.5 accent-gold" />
+          <span>
+            <span data-i18n="newsletter.consent"></span>
+            <a href="privacy.html" class="underline hover:text-coffee" data-i18n="newsletter.consentLink"></a>
+          </span>
+        </label>
+        <div class="hidden" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off" /></div>
+        <p class="text-sm mt-3 min-h-[1.25rem]" data-role="status" aria-live="polite"></p>
       </form>
     </section>
 
@@ -298,7 +309,6 @@
           Questions about a piece, an order, or anything else — we'd like to hear from you.
         </p>
 
-        <!-- TODO(contact): point this form at a backend/email service; see initContactForm() in assets/js/main.js -->
         <form id="contact-form" class="mt-10 flex flex-col gap-5">
           <div>
             <label for="contact-name" class="block text-sm text-coffeelight mb-1.5" data-i18n="contact.name">Name</label>
@@ -337,6 +347,8 @@
           >
             Send message
           </button>
+          <div class="hidden" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off" /></div>
+          <p class="text-sm min-h-[1.25rem]" data-role="status" aria-live="polite"></p>
         </form>
 
         <p class="mt-8 text-center text-sm text-coffeelight">

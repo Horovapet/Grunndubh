@@ -112,6 +112,16 @@ project settings once you have one.
   in the Czech Republic (Packeta pickup point, Ceska posta, PPL) and one EU option with a price per country
   (Packeta home delivery x 1.21 VAT, see the note in the JSON). Malta and Cyprus are not offered. Packeta pickup points (Z-Point / Z-Box) are offered in CZ, PL, HU and SK; to add a country, add a `pickup` price to it in the JSON. Ceska posta, PPL and EU delivery collect the address on the Stripe page.
 
+## Contact and newsletter forms
+
+- `functions/api/contact.js` and `functions/api/newsletter.js` e-mail the messages to grunndubh@gmail.com
+  through Resend (https://resend.com). Newsletter sign-ups arrive as an e-mail with the consent time.
+- Setup: create a free Resend account **with the e-mail grunndubh@gmail.com**, create an API key and add it in
+  Cloudflare (Pages project -> Settings -> Variables and Secrets) as the secret `RESEND_API_KEY`, then redeploy.
+  Without a verified domain Resend only delivers to the account's own address, which is exactly what we need.
+- Optional variable `MAIL_TO` changes the receiving address.
+- The privacy policy names Resend as a recipient (sections 4.5 and 5.1).
+
 ## Placeholders still needed before this goes live
 
 - **Photos** — drop real files at these exact paths (the page will pick
@@ -129,8 +139,5 @@ project settings once you have one.
 - **Packeta** — carrier is named in Terms 5.1 / Privacy 4.2. The public widget key is in `assets/js/config.js` (not yet loaded).
 - **Stripe checkout** — every "Buy" button is disabled on purpose. See the
   `TODO(stripe)` comments in `index.html` and `assets/js/main.js`.
-- **Newsletter/contact form backends** — both forms are front-end only
-  right now. See `TODO(newsletter)` / `TODO(contact)` in
-  `assets/js/main.js`.
 - **Custom domain** (optional) — add later in Cloudflare Pages once you
   have one; the `*.pages.dev` URL works fine until then.
