@@ -36,7 +36,7 @@ const translations = {
         country: "Delivery country",
         methods: {
           "packeta-point": "Zásilkovna – pickup point",
-          "packeta-point-eu": "Z-Point / Z-Box",
+          "packeta-point-eu": "Z-Point / Z-Box pickup point",
           "ceska-posta": "\u010cesk\u00e1 po\u0161ta \u2013 to your address",
           ppl: "PPL \u2013 to your address",
           "eu-home": "Delivery to your address",
@@ -47,7 +47,7 @@ const translations = {
         addressNote: "You will enter your address at payment.",
       },
       pickup: {
-        choose: "Choose Packeta pickup point",
+        choose: "Choose a Zásilkovna pickup point",
         change: "Change pickup point",
         none: "No pickup point chosen yet.",
         hintConsent: "Please agree to the Terms & Conditions to continue.",
@@ -355,7 +355,7 @@ const translations = {
         country: "Zem\u011b doru\u010den\u00ed",
         methods: {
           "packeta-point": "Z\u00e1silkovna \u2013 v\u00fddejn\u00ed m\u00edsto",
-          "packeta-point-eu": "Z-Point / Z-Box",
+          "packeta-point-eu": "Z-Point / Z-Box \u2013 v\u00fddejn\u00ed m\u00edsto",
           "ceska-posta": "\u010cesk\u00e1 po\u0161ta \u2013 na adresu",
           ppl: "PPL \u2013 na adresu",
           "eu-home": "Doru\u010den\u00ed na adresu",
@@ -366,7 +366,7 @@ const translations = {
         addressNote: "Adresu zad\u00e1te p\u0159i platb\u011b.",
       },
       pickup: {
-        choose: "Vybrat v\u00fddejn\u00ed m\u00edsto Packeta",
+        choose: "Vybrat v\u00fddejn\u00ed m\u00edsto Z\u00e1silkovny",
         change: "Zm\u011bnit v\u00fddejn\u00ed m\u00edsto",
         none: "V\u00fddejn\u00ed m\u00edsto zat\u00edm nen\u00ed vybr\u00e1no.",
         hintConsent: "Pro pokra\u010dov\u00e1n\u00ed pros\u00edm souhlaste s obchodn\u00edmi podm\u00ednkami.",

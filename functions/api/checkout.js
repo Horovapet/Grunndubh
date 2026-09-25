@@ -31,7 +31,7 @@ function resolveShipping(country, methodId) {
 
 const SHIPPING_NAMES = {
   "packeta-point": { cz: "Zásilkovna – výdejní místo", en: "Zásilkovna – pickup point" },
-  "packeta-point-eu": { cz: "Z-Point / Z-Box", en: "Z-Point / Z-Box" },
+  "packeta-point-eu": { cz: "Z-Point / Z-Box – výdejní místo", en: "Z-Point / Z-Box pickup point" },
   "ceska-posta": { cz: "Česká pošta", en: "Česká pošta" },
   ppl: { cz: "PPL", en: "PPL" },
   "eu-home": { cz: "Doručení na adresu", en: "Delivery to your address" },
