@@ -69,7 +69,7 @@ function renderProducts(lang) {
           <p class="text-sm text-[#5C4430] mt-1" data-role="point"></p>
         </div>
 
-        <p class="text-sm text-[#5C4430] mt-4 whitespace-pre-line" data-role="summary"></p>
+        <div class="mt-4 text-sm text-[#5C4430]" data-role="summary"></div>
 
         <label class="flex items-start gap-2 mt-4 text-sm text-[#8A6E52] cursor-pointer" for="${consentId}">
           <input type="checkbox" id="${consentId}" data-action="consent" class="mt-0.5 accent-[#AD8A54]" />
@@ -158,14 +158,14 @@ function syncCard(card) {
     : t("shop.pickup.none", lang);
 
   const item = product["price_" + cur];
-  const summary = item
-    ? t("shop.ship.summary", lang)
-        .replace("{item}", money(item, cur))
-        .replace("{ship}", money(method[cur], cur))
-        .replace("{total}", money(item + method[cur], cur))
+  const row = (label, amount, extra = "") =>
+    `<div class="flex justify-between gap-4 py-1 ${extra}"><span>${label}</span><span class="whitespace-nowrap">${amount}</span></div>`;
+  card.querySelector('[data-role="summary"]').innerHTML = item
+    ? row(translations[lang].products[id].name, money(item, cur)) +
+      row(t("shop.ship.deliveryLabel", lang), money(method[cur], cur)) +
+      row(t("shop.ship.totalLabel", lang), money(item + method[cur], cur), "mt-1 pt-2 border-t border-[#E7DBC6] font-medium text-[#3B2B1E]") +
+      (method.pickup ? "" : `<p class="text-xs text-[#8A6E52] mt-2">${t("shop.ship.addressNote", lang)}</p>`)
     : "";
-  card.querySelector('[data-role="summary"]').textContent =
-    summary + (method.pickup ? "" : "\n" + t("shop.ship.addressNote", lang));
 
   card.querySelector('[data-action="consent"]').checked = state.consent;
   const buy = card.querySelector('[data-action="buy"]');

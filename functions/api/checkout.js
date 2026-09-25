@@ -30,7 +30,7 @@ const SHIPPING_NAMES = {
   "packeta-point": { cz: "Zásilkovna – výdejní místo", en: "Packeta pickup point" },
   "ceska-posta": { cz: "Česká pošta", en: "Česká pošta" },
   ppl: { cz: "PPL", en: "PPL" },
-  "eu-home": { cz: "Doručení na adresu (EU)", en: "Delivery to your address (EU)" },
+  "eu-home": { cz: "Zásilkovna (Packeta) – na adresu", en: "Packeta – to your address" },
 };
 
 const TERMS_VERSION = "2026-09-18";
