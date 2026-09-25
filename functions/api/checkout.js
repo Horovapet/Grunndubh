@@ -10,7 +10,8 @@ const PRODUCTS = {
   obsidian: {
     name: { cz: "Obsidian", en: "Obsidian" },
     amounts: { czk: 420, eur: 18 },
-    status: "made-to-order",
+    status: "in-stock",
+    maxQty: 5, // keep in sync with maxQty in assets/js/i18n.js
   },
 };
 
@@ -60,6 +61,24 @@ const json = (body, status = 200) =>
 
 const clip = (value, max) => String(value ?? "").slice(0, max);
 
+// Cart lines from the browser: [{ productId, qty }]. Returns validated lines or null.
+function normalizeItems(list) {
+  if (!Array.isArray(list) || list.length < 1 || list.length > 10) return null;
+  const merged = new Map();
+  for (const line of list) {
+    const product = PRODUCTS[line?.productId];
+    const qty = Number(line?.qty);
+    if (!product || !Number.isInteger(qty) || qty < 1) return null;
+    merged.set(line.productId, (merged.get(line.productId) || 0) + qty);
+  }
+  const items = [];
+  for (const [id, qty] of merged) {
+    if (qty > PRODUCTS[id].maxQty) return null;
+    items.push({ id, product: PRODUCTS[id], qty });
+  }
+  return items;
+}
+
 export async function onRequestPost({ request, env }) {
   const origin = new URL(request.url).origin;
   const requestOrigin = request.headers.get("Origin");
@@ -74,7 +93,6 @@ export async function onRequestPost({ request, env }) {
     return json({ error: "bad_request" }, 400);
   }
 
-  const product = PRODUCTS[body.productId];
   const lang = body.lang === "cz" ? "cz" : "en";
   const currency = lang === "cz" ? "czk" : "eur";
   const country = clip(body.country, 2).toUpperCase();
@@ -82,9 +100,10 @@ export async function onRequestPost({ request, env }) {
   const point = body.packetaPoint || {};
   const pointId = clip(point.id, 40);
   const pointCountry = clip(point.country, 2).toLowerCase();
+  const items = normalizeItems(body.items);
 
-  if (!product) return json({ error: "unknown_product" }, 400);
-  if (product.status === "sold-out") return json({ error: "sold_out" }, 409);
+  if (!items) return json({ error: "invalid_items" }, 400);
+  if (items.some((item) => item.product.status === "sold-out")) return json({ error: "sold_out" }, 409);
   if (body.consent !== true) return json({ error: "consent_required" }, 400);
   if (!ship) return json({ error: "invalid_shipping" }, 400);
   if (ship.pickup && (!pointId || pointCountry !== country.toLowerCase())) return json({ error: "pickup_point_required" }, 400);
@@ -96,7 +115,7 @@ export async function onRequestPost({ request, env }) {
   add("mode", "payment");
   add("locale", lang === "cz" ? "cs" : "en");
   add("success_url", `${origin}/success.html?session_id={CHECKOUT_SESSION_ID}`);
-  add("cancel_url", `${origin}/product.html?id=${encodeURIComponent(body.productId)}`);
+  add("cancel_url", `${origin}/cart.html`);
   add("phone_number_collection[enabled]", "true");
   add("custom_text[submit][message]", text.submit);
 
@@ -109,20 +128,23 @@ export async function onRequestPost({ request, env }) {
     add("shipping_address_collection[allowed_countries][0]", country);
   }
 
-  add("line_items[0][quantity]", 1);
-  add("line_items[0][price_data][currency]", currency);
-  add("line_items[0][price_data][unit_amount]", product.amounts[currency] * 100);
-  add("line_items[0][price_data][product_data][name]", product.name[lang]);
+  items.forEach((item, i) => {
+    add(`line_items[${i}][quantity]`, item.qty);
+    add(`line_items[${i}][price_data][currency]`, currency);
+    add(`line_items[${i}][price_data][unit_amount]`, item.product.amounts[currency] * 100);
+    add(`line_items[${i}][price_data][product_data][name]`, item.product.name[lang]);
+  });
 
   if (ship[currency] > 0) {
-    add("line_items[1][quantity]", 1);
-    add("line_items[1][price_data][currency]", currency);
-    add("line_items[1][price_data][unit_amount]", ship[currency] * 100);
-    add("line_items[1][price_data][product_data][name]", `${text.shipping}: ${SHIPPING_NAMES[ship.id === "packeta-point" && country !== shipping.domestic.country ? "packeta-point-eu" : ship.id][lang]} (${country})`);
+    const n = items.length;
+    add(`line_items[${n}][quantity]`, 1);
+    add(`line_items[${n}][price_data][currency]`, currency);
+    add(`line_items[${n}][price_data][unit_amount]`, ship[currency] * 100);
+    add(`line_items[${n}][price_data][product_data][name]`, `${text.shipping}: ${SHIPPING_NAMES[ship.id === "packeta-point" && country !== shipping.domestic.country ? "packeta-point-eu" : ship.id][lang]} (${country})`);
   }
 
   const metadata = {
-    product_id: body.productId,
+    items: items.map((item) => `${item.id} x${item.qty}`).join(", "),
     lang,
     shipping_method: ship.id,
     shipping_country: country,
@@ -141,7 +163,7 @@ export async function onRequestPost({ request, env }) {
     add(`metadata[${key}]`, value);
     add(`payment_intent_data[metadata][${key}]`, value);
   }
-  add("payment_intent_data[description]", `Grunndubh - ${product.name.en}`);
+  add("payment_intent_data[description]", `Grunndubh - ${items.map((item) => `${item.product.name.en} x${item.qty}`).join(", ")}`);
 
   const response = await fetch("https://api.stripe.com/v1/checkout/sessions", {
     method: "POST",

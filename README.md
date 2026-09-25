@@ -101,6 +101,8 @@ project settings once you have one.
 
 - The home page only shows photo, name and short text per piece; each card opens `product.html?id=<id>`,
   which has the photos and the whole purchase flow. Extra photos: add them to `images` in `PRODUCTS`.
+- Cart: the product page has quantity + "Add to cart"; the cart (kept in the browser's localStorage, max `maxQty`
+  per piece) lives on `cart.html`, where delivery, consent and the order button are. The cart is emptied on `success.html`.
 - Purchase flow: consent checkbox -> Packeta pickup-point map -> "Order with obligation to pay" -> Stripe Checkout.
   Currency follows the language toggle (CZ = CZK, EN = EUR).
 - `functions/api/checkout.js` is a Cloudflare Pages Function (`POST /api/checkout`). It holds the real product

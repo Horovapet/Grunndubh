@@ -52,15 +52,85 @@ function renderProducts(lang) {
   }).join("");
 }
 
-// Purchase controls (delivery, consent, buy). Filled in and kept in sync by syncCard().
-function purchaseBlock(product, lang) {
-  const consentId = `consent-${product.id}`;
+// Cart (kept in the browser only; no cookies). Lines look like { id, qty }.
+const CART_KEY = "grunndubh-cart";
+const maxQtyFor = (id) => (PRODUCTS.find((p) => p.id === id) || {}).maxQty || 5;
+
+function cartGet() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+    return Array.isArray(raw)
+      ? raw.filter((l) => PRODUCTS.some((p) => p.id === l.id) && Number.isInteger(l.qty) && l.qty > 0)
+      : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function cartSet(lines) {
+  try {
+    localStorage.setItem(CART_KEY, JSON.stringify(lines));
+  } catch (e) {
+    /* storage unavailable - the cart just will not persist */
+  }
+  updateCartLink();
+}
+
+const cartCount = () => cartGet().reduce((n, l) => n + l.qty, 0);
+
+function cartAdd(id, qty) {
+  const lines = cartGet();
+  const line = lines.find((l) => l.id === id);
+  if (line) line.qty = Math.min(maxQtyFor(id), line.qty + qty);
+  else lines.push({ id, qty: Math.min(maxQtyFor(id), qty) });
+  cartSet(lines);
+}
+
+// "Cart (2)" link, added to every page's header next to the language switch.
+function updateCartLink() {
+  const group = document.querySelector("[data-lang-btn]")?.parentElement;
+  if (!group) return;
+  let link = document.querySelector('[data-role="cart-link"]');
+  if (!link) {
+    link = document.createElement("a");
+    link.href = "cart.html";
+    link.setAttribute("data-role", "cart-link");
+    link.className = "mr-3 text-coffeelight hover:text-coffeedark whitespace-nowrap";
+    group.prepend(link);
+  }
+  const n = cartCount();
+  link.textContent = t("cart.nav", getLang()) + (n ? ` (${n})` : "");
+}
+
+const productQty = {};
+
+// Product page: quantity and "Add to cart".
+function addToCartBlock(product, lang) {
+  const qty = (productQty[product.id] ||= 1);
+  const dispatch = t("shop.ship.dispatch", lang).replace("{days}", SHIPPING.dispatchDays);
+  return `
+    <div class="flex items-center gap-4">
+      <span class="text-xs tracking-[0.15em] uppercase text-[#8A6E52]">${t("cart.qty", lang)}</span>
+      <div class="flex items-center gap-3 text-[#5C4430]">
+        <button type="button" data-action="qty-minus" data-id="${product.id}" class="w-8 h-8 rounded-full border border-[#E7DBC6]" aria-label="-">&minus;</button>
+        <span data-role="qty" class="w-6 text-center">${qty}</span>
+        <button type="button" data-action="qty-plus" data-id="${product.id}" class="w-8 h-8 rounded-full border border-[#E7DBC6]" aria-label="+">+</button>
+      </div>
+    </div>
+    <button type="button" data-action="add" data-id="${product.id}" class="mt-5 w-full py-3 rounded-full bg-[#3B2B1E] text-[#FDFCFA] text-sm tracking-wide uppercase hover:bg-[#5C4430] transition-colors">${t("cart.add", lang)}</button>
+    <p class="text-sm text-[#6B6A3C] mt-3 min-h-[1.25rem]" data-role="added" aria-live="polite"></p>
+    <p class="text-xs text-[#8A6E52]">${dispatch}</p>
+  `;
+}
+
+// Cart page: delivery, order summary, consent and the order button. Kept in sync by syncCard().
+function deliveryBlock(lang) {
   return `
     <p class="text-xs text-[#8A6E52]" data-role="currency-note">${t("shop.pickup.chargedIn", lang)}</p>
 
     <div class="mt-5">
-      <label class="block text-xs tracking-[0.15em] uppercase text-[#8A6E52] mb-1" for="country-${product.id}">${t("shop.ship.country", lang)}</label>
-      <select id="country-${product.id}" data-action="country" class="w-full rounded-lg border border-[#E7DBC6] bg-[#FDFCFA] px-3 py-2 text-sm text-[#5C4430] focus:outline-none focus:ring-1 focus:ring-[#AD8A54]">${countryOptions(lang, stateFor(product.id).country)}</select>
+      <label class="block text-xs tracking-[0.15em] uppercase text-[#8A6E52] mb-1" for="country-cart">${t("shop.ship.country", lang)}</label>
+      <select id="country-cart" data-action="country" class="w-full rounded-lg border border-[#E7DBC6] bg-[#FDFCFA] px-3 py-2 text-sm text-[#5C4430] focus:outline-none focus:ring-1 focus:ring-[#AD8A54]">${countryOptions(lang, stateFor("cart").country)}</select>
     </div>
     <fieldset class="mt-3" data-role="methods"></fieldset>
 
@@ -71,8 +141,8 @@ function purchaseBlock(product, lang) {
 
     <div class="mt-4 text-sm text-[#5C4430]" data-role="summary"></div>
 
-    <label class="flex items-start gap-2 mt-4 text-sm text-[#8A6E52] cursor-pointer" for="${consentId}">
-      <input type="checkbox" id="${consentId}" data-action="consent" class="mt-0.5 accent-[#AD8A54]" />
+    <label class="flex items-start gap-2 mt-4 text-sm text-[#8A6E52] cursor-pointer" for="consent-cart">
+      <input type="checkbox" id="consent-cart" data-action="consent" class="mt-0.5 accent-[#AD8A54]" />
       <span>
         <span>${t("shop.consentLabel", lang)}</span>
         <a href="terms.html" class="underline hover:text-[#5C4430]">${t("shop.consentLink", lang)}</a>
@@ -82,6 +152,54 @@ function purchaseBlock(product, lang) {
     <button type="button" data-action="buy" class="mt-4 w-full py-3 rounded-full text-sm tracking-wide uppercase transition-colors"></button>
     <p class="text-xs text-[#8A6E52] mt-2 min-h-[1rem]" data-role="hint" aria-live="polite"></p>
   `;
+}
+
+function renderCartPage(lang) {
+  const container = document.getElementById("cart-page");
+  if (!container || !SHIPPING) return;
+
+  const lines = cartGet();
+  if (!lines.length) {
+    container.innerHTML = `
+      <p class="text-[#8A6E52]">${t("cart.empty", lang)}</p>
+      <a href="index.html#shop" class="inline-block mt-6 text-sm underline text-[#8A6E52] hover:text-[#5C4430]">${t("cart.continue", lang)}</a>`;
+    return;
+  }
+
+  const items = lines
+    .map((line) => {
+      const product = PRODUCTS.find((p) => p.id === line.id);
+      const copy = translations[lang].products[product.id];
+      return `
+        <div class="flex gap-4 py-5 border-b border-[#E7DBC6]">
+          <a href="product.html?id=${product.id}" class="block w-20 shrink-0">
+            <div class="relative aspect-[4/5] overflow-hidden rounded-lg bg-[#F0E8D9]">${photoHtml(product.images[0], copy.name)}</div>
+          </a>
+          <div class="flex-1">
+            <a href="product.html?id=${product.id}" class="font-serif text-xl text-[#3B2B1E]">${copy.name}</a>
+            <p class="text-sm text-[#8A6E52] mt-1">${priceLabelFor(product, lang)}</p>
+            <div class="flex items-center gap-4 mt-3 text-[#5C4430]">
+              <div class="flex items-center gap-3">
+                <button type="button" data-action="cart-minus" data-id="${product.id}" class="w-8 h-8 rounded-full border border-[#E7DBC6]" aria-label="-">&minus;</button>
+                <span class="w-6 text-center">${line.qty}</span>
+                <button type="button" data-action="cart-plus" data-id="${product.id}" class="w-8 h-8 rounded-full border border-[#E7DBC6]" aria-label="+">+</button>
+              </div>
+              <button type="button" data-action="cart-remove" data-id="${product.id}" class="text-sm underline text-[#8A6E52] hover:text-[#5C4430]">${t("cart.remove", lang)}</button>
+            </div>
+          </div>
+        </div>`;
+    })
+    .join("");
+
+  container.innerHTML = `
+    <div class="grid lg:grid-cols-5 gap-10 lg:gap-14 items-start">
+      <div class="lg:col-span-3" data-animate>
+        ${items}
+        <a href="index.html#shop" class="inline-block mt-6 text-sm underline text-[#8A6E52] hover:text-[#5C4430]">${t("cart.continue", lang)}</a>
+      </div>
+      <div class="lg:col-span-2" data-animate data-product="cart">${deliveryBlock(lang)}</div>
+    </div>`;
+  container.querySelectorAll("[data-product]").forEach(syncCard);
 }
 
 // Product page (product.html?id=...): photos, description and the whole purchase flow.
@@ -124,11 +242,10 @@ function renderProductPage(lang) {
         <h1 class="font-serif text-4xl text-[#3B2B1E] mt-2">${copy.name}</h1>
         <p class="text-[#8A6E52] mt-3 leading-relaxed">${copy.description}</p>
         <p class="text-[#5C4430] text-xl mt-4">${priceLabelFor(product, lang)}</p>
-        <div class="mt-8 max-w-md" data-product="${product.id}">${purchaseBlock(product, lang)}</div>
+        <div class="mt-8 max-w-md">${addToCartBlock(product, lang)}</div>
       </div>
     </div>
   `;
-  container.querySelectorAll("[data-product]").forEach(syncCard);
 }
 
 // Delivery prices come from assets/shipping.json (also used by the server).
@@ -170,9 +287,9 @@ function countryOptions(lang, selected) {
 }
 
 function syncCard(card) {
-  const id = card.getAttribute("data-product");
-  const product = PRODUCTS.find((p) => p.id === id);
+  const id = "cart";
   const state = stateFor(id);
+  const lines = cartGet();
   const lang = getLang();
   const cur = currencyFor(lang);
 
@@ -199,20 +316,27 @@ function syncCard(card) {
     ? [state.point.name, state.point.city].filter(Boolean).join(", ")
     : t("shop.pickup.none", lang);
 
-  const item = product["price_" + cur];
   const row = (label, amount, extra = "") =>
     `<div class="flex justify-between gap-4 py-1 ${extra}"><span>${label}</span><span class="whitespace-nowrap">${amount}</span></div>`;
-  card.querySelector('[data-role="summary"]').innerHTML = item
-    ? row(translations[lang].products[id].name, money(item, cur)) +
+  const priceOf = (line) => PRODUCTS.find((p) => p.id === line.id)["price_" + cur];
+  const priced = lines.length > 0 && lines.every(priceOf);
+  const itemsTotal = lines.reduce((sum, line) => sum + (priceOf(line) || 0) * line.qty, 0);
+  card.querySelector('[data-role="summary"]').innerHTML = priced
+    ? lines
+        .map((line) => {
+          const name = translations[lang].products[line.id].name;
+          return row(line.qty > 1 ? `${name} \u00d7 ${line.qty}` : name, money(priceOf(line) * line.qty, cur));
+        })
+        .join("") +
       row(t("shop.ship.deliveryLabel", lang), money(method[cur], cur)) +
-      row(t("shop.ship.totalLabel", lang), money(item + method[cur], cur), "mt-1 pt-2 border-t border-[#E7DBC6] font-medium text-[#3B2B1E]") +
+      row(t("shop.ship.totalLabel", lang), money(itemsTotal + method[cur], cur), "mt-1 pt-2 border-t border-[#E7DBC6] font-medium text-[#3B2B1E]") +
       (method.pickup ? "" : `<p class="text-xs text-[#8A6E52] mt-2">${t("shop.ship.addressNote", lang)}</p>`) +
       `<p class="text-xs text-[#8A6E52] mt-2">${t("shop.ship.dispatch", lang).replace("{days}", SHIPPING.dispatchDays)}</p>`
     : "";
 
   card.querySelector('[data-action="consent"]').checked = state.consent;
   const buy = card.querySelector('[data-action="buy"]');
-  const ready = Boolean(item) && state.consent && (!method.pickup || state.point) && !state.busy;
+  const ready = priced && state.consent && (!method.pickup || state.point) && !state.busy;
   buy.textContent = t("shop.buy", lang);
   buy.disabled = !ready;
   buy.className =
@@ -268,8 +392,7 @@ async function pickPoint(card) {
 }
 
 async function startCheckout(card) {
-  const id = card.getAttribute("data-product");
-  const state = stateFor(id);
+  const state = stateFor(card.getAttribute("data-product"));
   const lang = getLang();
   state.busy = true;
   state.message = t("shop.pickup.redirecting", lang);
@@ -279,7 +402,7 @@ async function startCheckout(card) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        productId: id,
+        items: cartGet().map((line) => ({ productId: line.id, qty: line.qty })),
         lang,
         consent: state.consent,
         country: state.country,
@@ -298,43 +421,76 @@ async function startCheckout(card) {
 }
 
 function initShopEvents() {
-  const root = document.getElementById("product-detail");
-  if (!root) return;
+  const productRoot = document.getElementById("product-detail");
+  const cartRoot = document.getElementById("cart-page");
 
-  root.addEventListener("change", (event) => {
-    const card = event.target.closest("[data-product]");
-    const action = event.target.getAttribute("data-action");
-    if (!card || !action) return;
-    const state = stateFor(card.getAttribute("data-product"));
-    if (action === "consent") state.consent = event.target.checked;
-    else if (action === "country") {
-      state.country = event.target.value;
-      if (state.point && state.point.country !== state.country.toLowerCase()) state.point = null;
-    } else if (action === "method") state.method = event.target.value;
-    else return;
-    state.message = "";
-    syncCard(card);
-  });
+  // Delivery choices on the cart page.
+  if (cartRoot) {
+    cartRoot.addEventListener("change", (event) => {
+      const card = event.target.closest("[data-product]");
+      const action = event.target.getAttribute("data-action");
+      if (!card || !action) return;
+      const state = stateFor("cart");
+      if (action === "consent") state.consent = event.target.checked;
+      else if (action === "country") {
+        state.country = event.target.value;
+        if (state.point && state.point.country !== state.country.toLowerCase()) state.point = null;
+      } else if (action === "method") state.method = event.target.value;
+      else return;
+      state.message = "";
+      syncCard(card);
+    });
 
-  root.addEventListener("click", (event) => {
-    const button = event.target.closest("[data-action]");
-    if (!button) return;
-    const action = button.getAttribute("data-action");
+    cartRoot.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-action]");
+      if (!button) return;
+      const action = button.getAttribute("data-action");
+      const id = button.getAttribute("data-id");
 
-    if (action === "thumb") {
-      const holder = root.querySelector('[data-role="main-image"]');
-      const img = holder.querySelector("img");
-      img.style.display = "";
-      img.nextElementSibling.style.display = "none";
-      img.src = button.getAttribute("data-src");
-      return;
-    }
+      if (action === "cart-plus" || action === "cart-minus" || action === "cart-remove") {
+        const lines = cartGet();
+        const line = lines.find((l) => l.id === id);
+        if (!line) return;
+        if (action === "cart-plus") line.qty = Math.min(maxQtyFor(id), line.qty + 1);
+        else if (action === "cart-minus") line.qty -= 1;
+        else line.qty = 0;
+        cartSet(lines.filter((l) => l.qty > 0));
+        renderCartPage(getLang());
+        return;
+      }
 
-    const card = event.target.closest("[data-product]");
-    if (!card) return;
-    if (action === "pick") pickPoint(card);
-    if (action === "buy" && !button.disabled) startCheckout(card);
-  });
+      const card = event.target.closest("[data-product]");
+      if (!card) return;
+      if (action === "pick") pickPoint(card);
+      if (action === "buy" && !button.disabled) startCheckout(card);
+    });
+  }
+
+  // Photos, quantity and "Add to cart" on the product page.
+  if (productRoot) {
+    productRoot.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-action]");
+      if (!button) return;
+      const action = button.getAttribute("data-action");
+      const id = button.getAttribute("data-id");
+
+      if (action === "thumb") {
+        const img = productRoot.querySelector('[data-role="main-image"] img');
+        img.style.display = "";
+        img.nextElementSibling.style.display = "none";
+        img.src = button.getAttribute("data-src");
+      } else if (action === "qty-plus" || action === "qty-minus") {
+        const next = (productQty[id] || 1) + (action === "qty-plus" ? 1 : -1);
+        productQty[id] = Math.max(1, Math.min(maxQtyFor(id), next));
+        productRoot.querySelector('[data-role="qty"]').textContent = productQty[id];
+      } else if (action === "add") {
+        cartAdd(id, productQty[id] || 1);
+        const lang = getLang();
+        productRoot.querySelector('[data-role="added"]').innerHTML =
+          `${t("cart.added", lang)} <a href="cart.html" class="underline">${t("cart.viewCart", lang)}</a>`;
+      }
+    });
+  }
 }
 
 function initLangToggle() {
@@ -439,10 +595,12 @@ document.addEventListener("DOMContentLoaded", () => {
   initShopEvents();
   initNewsletterForm();
   initContactForm();
+  if (/success(\.html)?$/.test(window.location.pathname)) cartSet([]);
   applyLang(getLang());
-  if (document.getElementById("product-detail")) {
+  if (document.getElementById("product-detail") || document.getElementById("cart-page")) {
     loadShipping().then(() => {
       renderProductPage(getLang());
+      renderCartPage(getLang());
       initScrollAnimations();
     });
   }
@@ -452,6 +610,8 @@ document.addEventListener("DOMContentLoaded", () => {
 document.addEventListener("langchange", (event) => {
   renderProducts(event.detail.lang);
   renderProductPage(event.detail.lang);
+  renderCartPage(event.detail.lang);
+  updateCartLink();
   // Re-observe any freshly rendered product cards for the scroll-in effect.
   initScrollAnimations();
 });

@@ -162,6 +162,17 @@ const translations = {
       },
       rights: "All rights reserved.",
     },
+    cart: {
+      nav: "Cart",
+      title: "Your cart",
+      empty: "Your cart is empty.",
+      continue: "Continue shopping",
+      add: "Add to cart",
+      added: "Added to your cart.",
+      viewCart: "View cart",
+      qty: "Quantity",
+      remove: "Remove",
+    },
     success: {
       title: "Thank you",
       text: "Your order is confirmed and payment went through. A receipt is on its way to your e-mail. Each piece is made by hand, so we will write to you once it is on its way.",
@@ -495,6 +506,17 @@ const translations = {
       },
       rights: "V\u0161echna pr\u00e1va vyhrazena.",
     },
+    cart: {
+      nav: "Ko\u0161\u00edk",
+      title: "V\u00e1\u0161 ko\u0161\u00edk",
+      empty: "V\u00e1\u0161 ko\u0161\u00edk je pr\u00e1zdn\u00fd.",
+      continue: "Pokra\u010dovat v n\u00e1kupu",
+      add: "P\u0159idat do ko\u0161\u00edku",
+      added: "P\u0159id\u00e1no do ko\u0161\u00edku.",
+      viewCart: "Zobrazit ko\u0161\u00edk",
+      qty: "Mno\u017estv\u00ed",
+      remove: "Odebrat",
+    },
     success: {
       title: "D\u011bkujeme",
       text: "Va\u0161e objedn\u00e1vka je potvrzen\u00e1 a platba prob\u011bhla. Doklad v\u00e1m p\u0159ijde na e-mail. Ka\u017ed\u00fd kus vyr\u00e1b\u00edme ru\u010dn\u011b, ozveme se v\u00e1m, a\u017e bude na cest\u011b.",
@@ -688,6 +710,7 @@ const PRODUCTS = [
     images: ["assets/images/product-obsidian.png"], // first = main photo; add more for the gallery
     price_czk: 420,
     price_eur: 18,
+    maxQty: 5, // keep in sync with maxQty in functions/api/checkout.js
     status: "in-stock",
   },
 ];
