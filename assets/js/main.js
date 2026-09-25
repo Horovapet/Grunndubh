@@ -126,7 +126,7 @@ function addToCartBlock(product, lang) {
 // Cart page: delivery, order summary, consent and the order button. Kept in sync by syncCard().
 function deliveryBlock(lang) {
   return `
-    <p class="text-xs text-[#8A6E52]" data-role="currency-note">${t("shop.pickup.chargedIn", lang)}</p>
+    <p class="text-xs text-[#8A6E52]" data-role="currency-note"></p>
 
     <div class="mt-5">
       <label class="block text-xs tracking-[0.15em] uppercase text-[#8A6E52] mb-1" for="country-cart">${t("shop.ship.country", lang)}</label>
@@ -263,7 +263,8 @@ const checkoutState = {};
 const stateFor = (id) =>
   (checkoutState[id] ||= { consent: false, country: "CZ", method: null, point: null, busy: false, message: "" });
 
-const currencyFor = (lang) => (lang === "cz" ? "czk" : "eur");
+// Czech deliveries are paid in CZK, everything else in EUR (the customer's bank then never has to convert).
+const currencyFor = (country) => (country === SHIPPING.domestic.country ? "czk" : "eur");
 const money = (n, cur) => Number(n).toLocaleString("cs-CZ") + "\u00a0" + (cur === "czk" ? "K\u010d" : "\u20ac");
 
 function availableMethods(country) {
@@ -291,7 +292,8 @@ function syncCard(card) {
   const state = stateFor(id);
   const lines = cartGet();
   const lang = getLang();
-  const cur = currencyFor(lang);
+  const cur = currencyFor(state.country);
+  card.querySelector('[data-role="currency-note"]').textContent = t(cur === "czk" ? "shop.pickup.chargedInCzk" : "shop.pickup.chargedInEur", lang);
 
   const methods = availableMethods(state.country);
   if (!methods.some((m) => m.id === state.method)) state.method = methods[0].id;

@@ -100,8 +100,8 @@ export async function onRequestPost({ request, env }) {
   }
 
   const lang = body.lang === "cz" ? "cz" : "en";
-  const currency = lang === "cz" ? "czk" : "eur";
   const country = clip(body.country, 2).toUpperCase();
+  const currency = country === shipping.domestic.country ? "czk" : "eur";
   const ship = resolveShipping(country, clip(body.method, 30));
   const point = body.packetaPoint || {};
   const pointId = clip(point.id, 40);
