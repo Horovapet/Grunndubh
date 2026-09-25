@@ -21,9 +21,12 @@ function resolveShipping(country, methodId) {
     const method = shipping.domestic.methods.find((m) => m.id === methodId);
     return method ? { id: method.id, pickup: method.pickup, czk: method.czk, eur: method.eur } : null;
   }
-  if (methodId !== shipping.eu.id) return null;
-  const price = shipping.eu.countries[country];
-  return price ? { id: shipping.eu.id, pickup: false, czk: price.czk, eur: price.eur } : null;
+  const entry = shipping.eu.countries[country];
+  if (!entry) return null;
+  if (methodId === "packeta-point") {
+    return entry.pickup ? { id: methodId, pickup: true, czk: entry.pickup.czk, eur: entry.pickup.eur } : null;
+  }
+  return methodId === shipping.eu.id ? { id: methodId, pickup: false, czk: entry.czk, eur: entry.eur } : null;
 }
 
 const SHIPPING_NAMES = {
@@ -83,7 +86,7 @@ export async function onRequestPost({ request, env }) {
   if (product.status === "sold-out") return json({ error: "sold_out" }, 409);
   if (body.consent !== true) return json({ error: "consent_required" }, 400);
   if (!ship) return json({ error: "invalid_shipping" }, 400);
-  if (ship.pickup && (!pointId || pointCountry !== "cz")) return json({ error: "pickup_point_required" }, 400);
+  if (ship.pickup && (!pointId || pointCountry !== country.toLowerCase())) return json({ error: "pickup_point_required" }, 400);
 
   const text = TEXT[lang];
   const params = new URLSearchParams();

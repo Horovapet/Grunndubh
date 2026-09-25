@@ -71,7 +71,11 @@
       },
       "HU": {
         "czk": 160,
-        "eur": 7
+        "eur": 7,
+        "pickup": {
+          "czk": 110,
+          "eur": 5
+        }
       },
       "IE": {
         "czk": 370,
@@ -99,7 +103,11 @@
       },
       "PL": {
         "czk": 150,
-        "eur": 6
+        "eur": 6,
+        "pickup": {
+          "czk": 80,
+          "eur": 4
+        }
       },
       "PT": {
         "czk": 230,
@@ -119,9 +127,13 @@
       },
       "SK": {
         "czk": 120,
-        "eur": 5
+        "eur": 5,
+        "pickup": {
+          "czk": 100,
+          "eur": 4
+        }
       }
     }
   },
-  "note": "EU prices = cheapest Packeta home delivery for a light parcel (price list of 25.9.2026) x 1.21 VAT (seller is not a VAT payer), rounded up to 10 CZK; EUR = CZK / 25 rounded up. Malta and Cyprus are not offered (Packeta has no home delivery there)."
+  "note": "EU prices = cheapest Packeta home delivery for a light parcel (price list of 25.9.2026) x 1.21 VAT (seller is not a VAT payer), rounded up to 10 CZK; EUR = CZK / 25 rounded up. Malta and Cyprus are not offered (Packeta has no home delivery there). Pickup (Packeta Z-Point / Z-Box) is offered in CZ, PL, HU and SK only."
 }

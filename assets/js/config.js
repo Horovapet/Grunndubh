@@ -3,6 +3,3 @@
 // Loaded by index.html before main.js (used by the pickup-point widget).
 const PACKETA_API_KEY = "e24a7c97bba90062";
 
-// Countries offered in the Packeta pickup-point map (comma-separated, lower-case).
-// Pickup points are offered for the Czech Republic only (see assets/shipping.json).
-const PACKETA_COUNTRIES = "cz";

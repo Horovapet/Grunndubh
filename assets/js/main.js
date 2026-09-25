@@ -111,8 +111,11 @@ const money = (n, cur) => Number(n).toLocaleString("cs-CZ") + "\u00a0" + (cur ==
 
 function availableMethods(country) {
   if (country === SHIPPING.domestic.country) return SHIPPING.domestic.methods;
-  const price = SHIPPING.eu.countries[country];
-  return price ? [{ id: SHIPPING.eu.id, pickup: false, czk: price.czk, eur: price.eur }] : [];
+  const entry = SHIPPING.eu.countries[country];
+  if (!entry) return [];
+  const methods = [{ id: SHIPPING.eu.id, pickup: false, czk: entry.czk, eur: entry.eur }];
+  if (entry.pickup) methods.unshift({ id: "packeta-point", pickup: true, czk: entry.pickup.czk, eur: entry.pickup.eur });
+  return methods;
 }
 
 function countryOptions(lang, selected) {
@@ -219,7 +222,7 @@ async function pickPoint(card) {
       }
       syncCard(card);
     },
-    { country: PACKETA_COUNTRIES, language: lang === "cz" ? "cs" : "en", view: "modal" }
+    { country: state.country.toLowerCase(), language: lang === "cz" ? "cs" : "en", view: "modal" }
   );
 }
 
@@ -263,7 +266,10 @@ function initShopEvents() {
     if (!card || !action) return;
     const state = stateFor(card.getAttribute("data-product"));
     if (action === "consent") state.consent = event.target.checked;
-    else if (action === "country") state.country = event.target.value;
+    else if (action === "country") {
+      state.country = event.target.value;
+      if (state.point && state.point.country !== state.country.toLowerCase()) state.point = null;
+    }
     else if (action === "method") state.method = event.target.value;
     else return;
     state.message = "";
