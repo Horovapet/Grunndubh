@@ -44,7 +44,7 @@ const SHIPPING_NAMES = {
   "eu-home": { cz: "Doručení na adresu", en: "Delivery to your address" },
 };
 
-const TERMS_VERSION = "2026-09-18";
+const TERMS_VERSION = "2026-09-25";
 
 const TEXT = {
   cz: {
