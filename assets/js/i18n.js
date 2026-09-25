@@ -80,6 +80,10 @@ const translations = {
         name: "Obsidian",
         description: "A glossy black teardrop, paired with a ridged gold circle stud.",
       },
+      ochre: {
+        name: "Ochre",
+        description: "A warm bronze-brown teardrop flecked with gold pigment, paired with a hammered gold oval stud.",
+      },
     },
     story: {
       eyebrow: "Our process",
@@ -424,6 +428,10 @@ const translations = {
         name: "Obsidian",
         description: "Leskl\u00e1 \u010dern\u00e1 slza, dopln\u011bn\u00e1 r\u00fdhovan\u00fdm zlat\u00fdm krou\u017ekem.",
       },
+      ochre: {
+        name: "Ochre",
+        description: "Tepl\u00e1 bronzov\u011b hn\u011bd\u00e1 slza s t\u0159pytkami zlat\u00e9ho pigmentu, dopln\u011bn\u00e1 klad\u00edvkovan\u00fdm zlat\u00fdm ov\u00e1lkem.",
+      },
     },
     story: {
       eyebrow: "N\u00e1\u0161 proces",
@@ -711,6 +719,18 @@ const PRODUCTS = [
     price_czk: 420,
     price_eur: 18,
     maxQty: 5, // keep in sync with maxQty in functions/api/checkout.js
+    status: "in-stock",
+  },
+  {
+    id: "ochre",
+    images: [
+      "assets/images/product-ochre-1.jpg",
+      "assets/images/product-ochre-2.jpg",
+      "assets/images/product-ochre-3.jpg",
+    ],
+    price_czk: 520,
+    price_eur: 22,
+    maxQty: 5,
     status: "in-stock",
   },
 ];

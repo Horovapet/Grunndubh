@@ -13,6 +13,12 @@ const PRODUCTS = {
     status: "in-stock",
     maxQty: 5, // keep in sync with maxQty in assets/js/i18n.js
   },
+  ochre: {
+    name: { cz: "Ochre", en: "Ochre" },
+    amounts: { czk: 520, eur: 22 },
+    status: "in-stock",
+    maxQty: 5,
+  },
 };
 
 // Delivery prices live in assets/shipping.json (shared with the storefront).
