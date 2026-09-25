@@ -1,0 +1,18 @@
+{
+  "domestic": {
+    "country": "CZ",
+    "methods": [
+      { "id": "packeta-point", "pickup": true, "czk": 89, "eur": 4 },
+      { "id": "ceska-posta", "pickup": false, "czk": 139, "eur": 6 },
+      { "id": "ppl", "pickup": false, "czk": 189, "eur": 8 }
+    ]
+  },
+  "eu": {
+    "id": "eu-home",
+    "zones": [
+      { "czk": 149, "eur": 6, "countries": ["PL", "SK", "HU", "HR", "RO", "BG", "SI"] },
+      { "czk": 269, "eur": 11, "countries": ["DE", "GR", "LT", "LV", "IT", "FR", "ES", "PT", "CY", "EE", "AT"] },
+      { "czk": 449, "eur": 18, "countries": ["NL", "BE", "FI", "SE", "DK", "IE", "LU"] }
+    ]
+  }
+}

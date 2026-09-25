@@ -11,7 +11,7 @@
 
 function renderProducts(lang) {
   const grid = document.getElementById("shop-grid");
-  if (!grid) return;
+  if (!grid || !SHIPPING) return;
 
   // Center a lone card instead of leaving an empty second column.
   grid.classList.toggle("sm:grid-cols-2", PRODUCTS.length > 1);
@@ -58,18 +58,26 @@ function renderProducts(lang) {
 
         <p class="text-xs text-[#8A6E52] mt-1" data-role="currency-note">${t("shop.pickup.chargedIn", lang)}</p>
 
-        <label class="flex items-start gap-2 mt-5 text-sm text-[#8A6E52] cursor-pointer" for="${consentId}">
+        <div class="mt-5">
+          <label class="block text-xs tracking-[0.15em] uppercase text-[#8A6E52] mb-1" for="country-${product.id}">${t("shop.ship.country", lang)}</label>
+          <select id="country-${product.id}" data-action="country" class="w-full rounded-lg border border-[#E7DBC6] bg-[#FDFCFA] px-3 py-2 text-sm text-[#5C4430] focus:outline-none focus:ring-1 focus:ring-[#AD8A54]">${countryOptions(lang, stateFor(product.id).country)}</select>
+        </div>
+        <fieldset class="mt-3" data-role="methods"></fieldset>
+
+        <div class="mt-2" data-role="pickup-block">
+          <button type="button" data-action="pick" class="text-sm underline text-[#8A6E52] hover:text-[#5C4430]"></button>
+          <p class="text-sm text-[#5C4430] mt-1" data-role="point"></p>
+        </div>
+
+        <p class="text-sm text-[#5C4430] mt-4 whitespace-pre-line" data-role="summary"></p>
+
+        <label class="flex items-start gap-2 mt-4 text-sm text-[#8A6E52] cursor-pointer" for="${consentId}">
           <input type="checkbox" id="${consentId}" data-action="consent" class="mt-0.5 accent-[#AD8A54]" />
           <span>
             <span data-i18n="shop.consentLabel">${t("shop.consentLabel", lang)}</span>
             <a href="terms.html" class="underline hover:text-[#5C4430]" data-i18n="shop.consentLink">${t("shop.consentLink", lang)}</a>
           </span>
         </label>
-
-        <div class="mt-4">
-          <button type="button" data-action="pick" class="text-sm underline text-[#8A6E52] hover:text-[#5C4430]"></button>
-          <p class="text-sm text-[#5C4430] mt-1" data-role="point"></p>
-        </div>
 
         <button
           type="button"
@@ -83,23 +91,85 @@ function renderProducts(lang) {
   grid.querySelectorAll("[data-product]").forEach(syncCard);
 }
 
+// Delivery prices come from assets/shipping.json (also used by the server).
+let SHIPPING = null;
+function loadShipping() {
+  return fetch("assets/shipping.json")
+    .then((response) => response.json())
+    .then((data) => {
+      SHIPPING = data;
+    });
+}
+
 // Per-product checkout state; survives re-renders (e.g. language switch).
 const checkoutState = {};
-const stateFor = (id) => (checkoutState[id] ||= { consent: false, point: null, busy: false, message: "" });
+const stateFor = (id) =>
+  (checkoutState[id] ||= { consent: false, country: "CZ", method: null, point: null, busy: false, message: "" });
+
+const currencyFor = (lang) => (lang === "cz" ? "czk" : "eur");
+const money = (n, cur) => Number(n).toLocaleString("cs-CZ") + "\u00a0" + (cur === "czk" ? "K\u010d" : "\u20ac");
+
+function availableMethods(country) {
+  if (country === SHIPPING.domestic.country) return SHIPPING.domestic.methods;
+  const zone = SHIPPING.eu.zones.find((z) => z.countries.includes(country));
+  return zone ? [{ id: SHIPPING.eu.id, pickup: false, czk: zone.czk, eur: zone.eur }] : [];
+}
+
+function countryOptions(lang, selected) {
+  const locale = lang === "cz" ? "cs" : "en";
+  const names = new Intl.DisplayNames([locale], { type: "region" });
+  const home = SHIPPING.domestic.country;
+  const others = SHIPPING.eu.zones
+    .flatMap((z) => z.countries)
+    .sort((a, b) => names.of(a).localeCompare(names.of(b), locale));
+  return [home, ...others]
+    .map((code) => `<option value="${code}"${code === selected ? " selected" : ""}>${names.of(code)}</option>`)
+    .join("");
+}
 
 function syncCard(card) {
   const id = card.getAttribute("data-product");
+  const product = PRODUCTS.find((p) => p.id === id);
   const state = stateFor(id);
   const lang = getLang();
-  const buy = card.querySelector('[data-action="buy"]');
-  const ready = state.consent && state.point && !state.busy;
+  const cur = currencyFor(lang);
 
-  card.querySelector('[data-action="consent"]').checked = state.consent;
+  const methods = availableMethods(state.country);
+  if (!methods.some((m) => m.id === state.method)) state.method = methods[0].id;
+  const method = methods.find((m) => m.id === state.method);
+
+  card.querySelector('[data-role="methods"]').innerHTML = methods
+    .map(
+      (m) => `
+      <label class="flex items-center justify-between gap-3 py-1 text-sm text-[#5C4430] cursor-pointer">
+        <span class="flex items-center gap-2">
+          <input type="radio" name="method-${id}" value="${m.id}" data-action="method" class="accent-[#AD8A54]"${m.id === state.method ? " checked" : ""} />
+          ${t("shop.ship.methods." + m.id, lang)}
+        </span>
+        <span class="text-[#8A6E52] whitespace-nowrap">${money(m[cur], cur)}</span>
+      </label>`
+    )
+    .join("");
+
+  card.querySelector('[data-role="pickup-block"]').hidden = !method.pickup;
   card.querySelector('[data-action="pick"]').textContent = t(state.point ? "shop.pickup.change" : "shop.pickup.choose", lang);
   card.querySelector('[data-role="point"]').textContent = state.point
     ? [state.point.name, state.point.city].filter(Boolean).join(", ")
     : t("shop.pickup.none", lang);
 
+  const item = product["price_" + cur];
+  const summary = item
+    ? t("shop.ship.summary", lang)
+        .replace("{item}", money(item, cur))
+        .replace("{ship}", money(method[cur], cur))
+        .replace("{total}", money(item + method[cur], cur))
+    : "";
+  card.querySelector('[data-role="summary"]').textContent =
+    summary + (method.pickup ? "" : "\n" + t("shop.ship.addressNote", lang));
+
+  card.querySelector('[data-action="consent"]').checked = state.consent;
+  const buy = card.querySelector('[data-action="buy"]');
+  const ready = Boolean(item) && state.consent && (!method.pickup || state.point) && !state.busy;
   buy.textContent = t("shop.buy", lang);
   buy.disabled = !ready;
   buy.className =
@@ -110,7 +180,7 @@ function syncCard(card) {
 
   let hint = state.message;
   if (!hint && !state.consent) hint = t("shop.pickup.hintConsent", lang);
-  else if (!hint && !state.point) hint = t("shop.pickup.hintPoint", lang);
+  else if (!hint && method.pickup && !state.point) hint = t("shop.pickup.hintPoint", lang);
   card.querySelector('[data-role="hint"]').textContent = hint;
 }
 
@@ -165,7 +235,14 @@ async function startCheckout(card) {
     const response = await fetch("/api/checkout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ productId: id, lang, consent: state.consent, packetaPoint: state.point }),
+      body: JSON.stringify({
+        productId: id,
+        lang,
+        consent: state.consent,
+        country: state.country,
+        method: state.method,
+        packetaPoint: state.method === "packeta-point" ? state.point : null,
+      }),
     });
     const data = await response.json();
     if (!response.ok || !data.url) throw new Error(data.error || "checkout_failed");
@@ -183,9 +260,13 @@ function initShopEvents() {
 
   grid.addEventListener("change", (event) => {
     const card = event.target.closest("[data-product]");
-    if (!card || event.target.getAttribute("data-action") !== "consent") return;
+    const action = event.target.getAttribute("data-action");
+    if (!card || !action) return;
     const state = stateFor(card.getAttribute("data-product"));
-    state.consent = event.target.checked;
+    if (action === "consent") state.consent = event.target.checked;
+    else if (action === "country") state.country = event.target.value;
+    else if (action === "method") state.method = event.target.value;
+    else return;
     state.message = "";
     syncCard(card);
   });
@@ -288,6 +369,10 @@ document.addEventListener("DOMContentLoaded", () => {
   initNewsletterForm();
   initContactForm();
   applyLang(getLang());
+  loadShipping().then(() => {
+    renderProducts(getLang());
+    initScrollAnimations();
+  });
   initScrollAnimations();
 });
 

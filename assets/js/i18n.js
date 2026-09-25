@@ -32,6 +32,17 @@ const translations = {
       heading: "Shop",
       intro: "Two shapes, made slowly, in small batches.",
       buy: "Order with obligation to pay",
+      ship: {
+        country: "Delivery country",
+        methods: {
+          "packeta-point": "Packeta pickup point",
+          "ceska-posta": "\u010cesk\u00e1 po\u0161ta \u2013 to your address",
+          ppl: "PPL \u2013 to your address",
+          "eu-home": "Delivery to your address",
+        },
+        summary: "Item {item} + delivery {ship} = {total}",
+        addressNote: "You will enter your address at payment.",
+      },
       pickup: {
         choose: "Choose Packeta pickup point",
         change: "Change pickup point",
@@ -198,7 +209,7 @@ const translations = {
           "4.6 The Seller may offset any claim for damage to the goods against the Buyer's refund claim.",
           "4.7 The Seller may withdraw from the contract at any time before the Buyer receives the goods, in particular if stock has been exhausted, and will refund the price without undue delay.",
           "## 5. Shipping and delivery",
-          "5.1 Goods are delivered within the European Union via Packeta. The delivery method and estimated timeframe are shown when the order is placed.",
+          "5.1 Within the Czech Republic, goods are delivered by Z\u00e1silkovna s.r.o. (Packeta, pickup points), \u010cesk\u00e1 po\u0161ta, s.p. or PPL CZ s.r.o., and to other EU member states by a carrier providing international transport. The delivery method and estimated timeframe are shown when the order is placed.",
           "5.2 If a delivery method is agreed at the Buyer's specific request, the Buyer bears the risk and any related additional costs.",
           "5.3 The Buyer must accept the goods on delivery. Where re-delivery or a different delivery method becomes necessary for reasons on the Buyer's side, the Buyer bears the related costs.",
           "5.4 On receiving the goods from the carrier, the Buyer must check the packaging is intact and report any damage to the carrier without delay. This does not affect the Buyer's rights arising from defective performance.",
@@ -337,6 +348,17 @@ const translations = {
       heading: "Obchod",
       intro: "Dva tvary, vyr\u00e1b\u011bn\u00e9 pomalu, v mal\u00fdch s\u00e9ri\u00edch.",
       buy: "Objednat s povinnost\u00ed platby",
+      ship: {
+        country: "Zem\u011b doru\u010den\u00ed",
+        methods: {
+          "packeta-point": "Z\u00e1silkovna \u2013 v\u00fddejn\u00ed m\u00edsto",
+          "ceska-posta": "\u010cesk\u00e1 po\u0161ta \u2013 na adresu",
+          ppl: "PPL \u2013 na adresu",
+          "eu-home": "Doru\u010den\u00ed na adresu",
+        },
+        summary: "Zbo\u017e\u00ed {item} + doprava {ship} = {total}",
+        addressNote: "Adresu zad\u00e1te p\u0159i platb\u011b.",
+      },
       pickup: {
         choose: "Vybrat v\u00fddejn\u00ed m\u00edsto Packeta",
         change: "Zm\u011bnit v\u00fddejn\u00ed m\u00edsto",
@@ -502,7 +524,7 @@ const translations = {
           "4.6 N\u00e1rok na n\u00e1hradu \u0161kody vznikl\u00e9 na zbo\u017e\u00ed je prod\u00e1vaj\u00edc\u00ed opr\u00e1vn\u011bn jednostrann\u011b zapo\u010d\u00edst proti n\u00e1roku kupuj\u00edc\u00edho na vr\u00e1cen\u00ed kupn\u00ed ceny.",
           "4.7 Prod\u00e1vaj\u00edc\u00ed je opr\u00e1vn\u011bn od kupn\u00ed smlouvy odstoupit kdykoliv do doby p\u0159evzet\u00ed zbo\u017e\u00ed kupuj\u00edc\u00edm, zejm\u00e9na v p\u0159\u00edpad\u011b vy\u010derp\u00e1n\u00ed z\u00e1sob. V takov\u00e9m p\u0159\u00edpad\u011b vr\u00e1t\u00ed kupuj\u00edc\u00edmu kupn\u00ed cenu bez zbyte\u010dn\u00e9ho odkladu.",
           "## 5. P\u0158EPRAVA A DOD\u00c1N\u00cd ZBO\u017d\u00cd",
-          "5.1 Zbo\u017e\u00ed je doru\u010dov\u00e1no v r\u00e1mci Evropsk\u00e9 unie prost\u0159ednictv\u00edm p\u0159epravce Packeta. Zp\u016fsob a p\u0159edpokl\u00e1dan\u00e1 doba dod\u00e1n\u00ed jsou kupuj\u00edc\u00edmu zobrazeny p\u0159i dokon\u010dov\u00e1n\u00ed objedn\u00e1vky.",
+          "5.1 Zbo\u017e\u00ed je doru\u010dov\u00e1no v r\u00e1mci \u010cesk\u00e9 republiky prost\u0159ednictv\u00edm Z\u00e1silkovny s.r.o. (Packeta, v\u00fddejn\u00ed m\u00edsta), \u010cesk\u00e9 po\u0161ty, s.p. nebo PPL CZ s.r.o., a do ostatn\u00edch \u010dlensk\u00fdch st\u00e1t\u016f Evropsk\u00e9 unie prost\u0159ednictv\u00edm p\u0159epravce zaji\u0161\u0165uj\u00edc\u00edho mezin\u00e1rodn\u00ed p\u0159epravu. Zp\u016fsob a p\u0159edpokl\u00e1dan\u00e1 doba dod\u00e1n\u00ed jsou kupuj\u00edc\u00edmu zobrazeny p\u0159i dokon\u010dov\u00e1n\u00ed objedn\u00e1vky.",
           "5.2 Je-li zp\u016fsob dopravy sjedn\u00e1n na z\u00e1klad\u011b zvl\u00e1\u0161tn\u00edho po\u017eadavku kupuj\u00edc\u00edho, nese kupuj\u00edc\u00ed riziko a p\u0159\u00edpadn\u00e9 dodate\u010dn\u00e9 n\u00e1klady s t\u00edmto zp\u016fsobem spojen\u00e9.",
           "5.3 Kupuj\u00edc\u00ed je povinen zbo\u017e\u00ed p\u0159i dod\u00e1n\u00ed p\u0159evz\u00edt. Vy\u017eaduje-li si z d\u016fvod\u016f na stran\u011b kupuj\u00edc\u00edho opakovan\u00e9 doru\u010den\u00ed nebo doru\u010den\u00ed jin\u00fdm zp\u016fsobem, ne\u017e bylo v objedn\u00e1vce uvedeno, je kupuj\u00edc\u00ed povinen uhradit n\u00e1klady s t\u00edm spojen\u00e9.",
           "5.4 P\u0159i p\u0159evzet\u00ed zbo\u017e\u00ed od p\u0159epravce je kupuj\u00edc\u00ed povinen zkontrolovat neporu\u0161enost obalu a p\u0159\u00edpadn\u00e9 z\u00e1vady neprodlen\u011b ozn\u00e1mit p\u0159epravci. T\u00edm nejsou dot\u010dena pr\u00e1va kupuj\u00edc\u00edho z vadn\u00e9ho pln\u011bn\u00ed.",
