@@ -154,7 +154,7 @@ function syncCard(card) {
     .join("");
 
   card.querySelector('[data-role="pickup-block"]').hidden = !method.pickup;
-  card.querySelector('[data-action="pick"]').textContent = t(state.point ? "shop.pickup.change" : "shop.pickup.choose", lang);
+  card.querySelector('[data-action="pick"]').textContent = t(state.point ? "shop.pickup.change" : state.country === SHIPPING.domestic.country ? "shop.pickup.choose" : "shop.pickup.chooseEu", lang);
   card.querySelector('[data-role="point"]').textContent = state.point
     ? [state.point.name, state.point.city].filter(Boolean).join(", ")
     : t("shop.pickup.none", lang);

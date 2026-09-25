@@ -48,6 +48,7 @@ const translations = {
       },
       pickup: {
         choose: "Choose a Zásilkovna pickup point",
+        chooseEu: "Choose a Z-Point / Z-Box",
         change: "Change pickup point",
         none: "No pickup point chosen yet.",
         hintConsent: "Please agree to the Terms & Conditions to continue.",
@@ -367,6 +368,7 @@ const translations = {
       },
       pickup: {
         choose: "Vybrat v\u00fddejn\u00ed m\u00edsto Z\u00e1silkovny",
+        chooseEu: "Vybrat Z-Point / Z-Box",
         change: "Zm\u011bnit v\u00fddejn\u00ed m\u00edsto",
         none: "V\u00fddejn\u00ed m\u00edsto zat\u00edm nen\u00ed vybr\u00e1no.",
         hintConsent: "Pro pokra\u010dov\u00e1n\u00ed pros\u00edm souhlaste s obchodn\u00edmi podm\u00ednkami.",
