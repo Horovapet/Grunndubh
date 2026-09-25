@@ -97,6 +97,20 @@ No custom domain is needed for this — the free `*.pages.dev` URL works
 immediately. You can attach a custom domain later from the same Pages
 project settings once you have one.
 
+## Checkout (Stripe + Packeta)
+
+- Card flow: consent checkbox -> Packeta pickup-point map -> "Order with obligation to pay" -> Stripe Checkout.
+  Currency follows the language toggle (CZ = CZK, EN = EUR).
+- `functions/api/checkout.js` is a Cloudflare Pages Function (`POST /api/checkout`). It holds the real prices
+  and shipping amounts (`PRODUCTS`, `SHIPPING`) and creates the Stripe session. Prices are also shown from
+  `PRODUCTS` in `assets/js/i18n.js` - change both places together.
+- **Secret key:** in Cloudflare -> your Pages project -> Settings -> Variables and Secrets, add
+  `STRIPE_SECRET_KEY` (start with the `sk_test_...` key, add a live key only when going live). Never commit it.
+- The pickup point and terms acceptance are saved as metadata on the Stripe payment, so you can create the
+  Packeta parcel from it. Turn on customer receipts in Stripe (Settings -> Emails).
+- Shipping charged to customers is `SHIPPING` in the function (currently 0 = free). Packeta pickup countries:
+  `PACKETA_COUNTRIES` in `assets/js/config.js` and `ALLOWED_COUNTRIES` in the function.
+
 ## Placeholders still needed before this goes live
 
 - **Photos** — drop real files at these exact paths (the page will pick
