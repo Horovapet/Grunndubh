@@ -74,15 +74,15 @@ const translations = {
     products: {
       "speckled-ivory": {
         name: "Speckled Ivory",
-        description: "A cream, coffee-speckled teardrop, paired with a hammered gold circle stud.",
+        description: "A cream, coffee-speckled teardrop, paired with a hammered gold-plated circle stud.",
       },
       obsidian: {
         name: "Obsidian",
-        description: "A glossy black teardrop, paired with a ridged gold circle stud.",
+        description: "A glossy black teardrop, paired with a ridged gold-plated circle stud.",
       },
       ochre: {
         name: "Ochre",
-        description: "A warm bronze-brown teardrop flecked with gold pigment, paired with a hammered gold oval stud.",
+        description: "A warm bronze-brown teardrop flecked with gold pigment, paired with a gold-plated hammered oval stud.",
       },
     },
     story: {
@@ -103,7 +103,7 @@ const translations = {
         },
         finish: {
           title: "Finish",
-          text: "A final polish, gold detailing, and a quiet check before it leaves our hands.",
+          text: "A final polish, gold-plated details, and a quiet check before it leaves our hands.",
         },
       },
     },
@@ -422,15 +422,15 @@ const translations = {
     products: {
       "speckled-ivory": {
         name: "Speckled Ivory",
-        description: "Kr\u00e9mov\u00e1, k\u00e1vou skvrnit\u00e1 slza, dopln\u011bn\u00e1 klad\u00edvkovan\u00fdm zlat\u00fdm krou\u017ekem.",
+        description: "Kr\u00e9mov\u00e1, k\u00e1vou skvrnit\u00e1 slza, dopln\u011bn\u00e1 klad\u00edvkovan\u00fdm pozlacen\u00fdm krou\u017ekem.",
       },
       obsidian: {
         name: "Obsidian",
-        description: "Leskl\u00e1 \u010dern\u00e1 slza, dopln\u011bn\u00e1 r\u00fdhovan\u00fdm zlat\u00fdm krou\u017ekem.",
+        description: "Leskl\u00e1 \u010dern\u00e1 slza, dopln\u011bn\u00e1 r\u00fdhovan\u00fdm pozlacen\u00fdm krou\u017ekem.",
       },
       ochre: {
         name: "Ochre",
-        description: "Tepl\u00e1 bronzov\u011b hn\u011bd\u00e1 slza s t\u0159pytkami zlat\u00e9ho pigmentu, dopln\u011bn\u00e1 klad\u00edvkovan\u00fdm zlat\u00fdm ov\u00e1lkem.",
+        description: "Tepl\u00e1 bronzov\u011b hn\u011bd\u00e1 slza s t\u0159pytkami zlat\u00e9ho pigmentu, dopln\u011bn\u00e1 klad\u00edvkovan\u00fdm pozlacen\u00fdm ov\u00e1lkem.",
       },
     },
     story: {
@@ -451,7 +451,7 @@ const translations = {
         },
         finish: {
           title: "Dokon\u010den\u00ed",
-          text: "Fin\u00e1ln\u00ed le\u0161t\u011bn\u00ed, zlat\u00e9 detaily a tich\u00e1 kontrola, ne\u017e kus opust\u00ed na\u0161e ruce.",
+          text: "Fin\u00e1ln\u00ed le\u0161t\u011bn\u00ed, pozlacen\u00e9 detaily a tich\u00e1 kontrola, ne\u017e kus opust\u00ed na\u0161e ruce.",
         },
       },
     },
