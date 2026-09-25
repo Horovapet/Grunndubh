@@ -9,9 +9,27 @@
 // comment there for why (it must exist before any placeholder <img>
 // can 404, which can happen before this file finishes loading).
 
+const priceLabelFor = (product, lang) => {
+  const prices = [
+    product.price_czk ? Number(product.price_czk).toLocaleString("cs-CZ") + "\u00a0K\u010d" : null,
+    product.price_eur ? Number(product.price_eur).toLocaleString("cs-CZ") + "\u00a0\u20ac" : null,
+  ].filter(Boolean);
+  return prices.length ? prices.join(" / ") : t("shop.priceComingSoon", lang);
+};
+
+const photoHtml = (src, alt) => `
+  <img src="${src}" alt="${alt}" class="w-full h-full object-cover" onerror="imgFallback(this)" />
+  <div class="absolute inset-0 hidden items-center justify-center text-center p-6">
+    <div>
+      <p class="text-xs tracking-[0.2em] uppercase text-[#8A6E52]">Photo placeholder</p>
+      <p class="text-sm text-[#8A6E52] mt-1">${src}</p>
+    </div>
+  </div>`;
+
+// Home page: a quiet grid of photo, name and short text. Each card opens the product page.
 function renderProducts(lang) {
   const grid = document.getElementById("shop-grid");
-  if (!grid || !SHIPPING) return;
+  if (!grid) return;
 
   // Center a lone card instead of leaving an empty second column.
   grid.classList.toggle("sm:grid-cols-2", PRODUCTS.length > 1);
@@ -20,75 +38,97 @@ function renderProducts(lang) {
 
   grid.innerHTML = PRODUCTS.map((product) => {
     const copy = translations[lang].products[product.id];
-    const statusLabel = t(`shop.status.${product.status}`, lang);
-    const statusColor = STATUS_COLORS[product.status];
-    const fmt = (n) => Number(n).toLocaleString("cs-CZ");
-    const prices = [
-      product.price_czk ? `${fmt(product.price_czk)}\u00a0K\u010d` : null,
-      product.price_eur ? `${fmt(product.price_eur)}\u00a0\u20ac` : null,
-    ].filter(Boolean);
-    const priceLabel = prices.length ? prices.join(" / ") : t("shop.priceComingSoon", lang);
-    const consentId = `consent-${product.id}`;
-
     return `
-      <article class="flex flex-col" data-animate data-product="${product.id}">
-        <div class="relative aspect-[4/5] overflow-hidden rounded-2xl bg-[#F0E8D9]">
-          <img
-            src="${product.image}"
-            alt="${copy.name}"
-            class="w-full h-full object-cover"
-            onerror="imgFallback(this)"
-          />
-          <div class="absolute inset-0 hidden items-center justify-center text-center p-6">
-            <div>
-              <p class="text-xs tracking-[0.2em] uppercase text-[#8A6E52]">Photo placeholder</p>
-              <p class="text-sm text-[#8A6E52] mt-1">${product.image}</p>
-            </div>
-          </div>
+      <a href="product.html?id=${product.id}" class="group block" data-animate>
+        <div class="relative aspect-[4/5] overflow-hidden rounded-2xl bg-[#F0E8D9] shadow-sm transition-transform duration-500 group-hover:-translate-y-1">
+          ${photoHtml(product.images[0], copy.name)}
         </div>
-
-        <div class="flex items-center gap-2 mt-5">
-          <span class="w-1.5 h-1.5 rounded-full" style="background-color:${statusColor}"></span>
-          <span class="text-xs tracking-[0.15em] uppercase text-[#5C4430]">${statusLabel}</span>
-        </div>
-
-        <h3 class="font-serif text-2xl text-[#3B2B1E] mt-2">${copy.name}</h3>
+        <h3 class="font-serif text-2xl text-[#3B2B1E] mt-5">${copy.name}</h3>
         <p class="text-[#8A6E52] mt-1 leading-relaxed">${copy.description}</p>
-        <p class="text-[#5C4430] mt-3">${priceLabel}</p>
-
-        <p class="text-xs text-[#8A6E52] mt-1" data-role="currency-note">${t("shop.pickup.chargedIn", lang)}</p>
-
-        <div class="mt-5">
-          <label class="block text-xs tracking-[0.15em] uppercase text-[#8A6E52] mb-1" for="country-${product.id}">${t("shop.ship.country", lang)}</label>
-          <select id="country-${product.id}" data-action="country" class="w-full rounded-lg border border-[#E7DBC6] bg-[#FDFCFA] px-3 py-2 text-sm text-[#5C4430] focus:outline-none focus:ring-1 focus:ring-[#AD8A54]">${countryOptions(lang, stateFor(product.id).country)}</select>
-        </div>
-        <fieldset class="mt-3" data-role="methods"></fieldset>
-
-        <div class="mt-2" data-role="pickup-block">
-          <button type="button" data-action="pick" class="text-sm underline text-[#8A6E52] hover:text-[#5C4430]"></button>
-          <p class="text-sm text-[#5C4430] mt-1" data-role="point"></p>
-        </div>
-
-        <div class="mt-4 text-sm text-[#5C4430]" data-role="summary"></div>
-
-        <label class="flex items-start gap-2 mt-4 text-sm text-[#8A6E52] cursor-pointer" for="${consentId}">
-          <input type="checkbox" id="${consentId}" data-action="consent" class="mt-0.5 accent-[#AD8A54]" />
-          <span>
-            <span data-i18n="shop.consentLabel">${t("shop.consentLabel", lang)}</span>
-            <a href="terms.html" class="underline hover:text-[#5C4430]" data-i18n="shop.consentLink">${t("shop.consentLink", lang)}</a>
-          </span>
-        </label>
-
-        <button
-          type="button"
-          data-action="buy"
-          class="mt-4 w-full py-3 rounded-full text-sm tracking-wide uppercase transition-colors"
-        ></button>
-        <p class="text-xs text-[#8A6E52] mt-2 min-h-[1rem]" data-role="hint" aria-live="polite"></p>
-      </article>
+        <p class="text-[#5C4430] mt-3">${priceLabelFor(product, lang)}</p>
+        <span class="inline-block mt-3 text-sm underline text-[#8A6E52] group-hover:text-[#5C4430]">${t("shop.view", lang)}</span>
+      </a>
     `;
   }).join("");
-  grid.querySelectorAll("[data-product]").forEach(syncCard);
+}
+
+// Purchase controls (delivery, consent, buy). Filled in and kept in sync by syncCard().
+function purchaseBlock(product, lang) {
+  const consentId = `consent-${product.id}`;
+  return `
+    <p class="text-xs text-[#8A6E52]" data-role="currency-note">${t("shop.pickup.chargedIn", lang)}</p>
+
+    <div class="mt-5">
+      <label class="block text-xs tracking-[0.15em] uppercase text-[#8A6E52] mb-1" for="country-${product.id}">${t("shop.ship.country", lang)}</label>
+      <select id="country-${product.id}" data-action="country" class="w-full rounded-lg border border-[#E7DBC6] bg-[#FDFCFA] px-3 py-2 text-sm text-[#5C4430] focus:outline-none focus:ring-1 focus:ring-[#AD8A54]">${countryOptions(lang, stateFor(product.id).country)}</select>
+    </div>
+    <fieldset class="mt-3" data-role="methods"></fieldset>
+
+    <div class="mt-2" data-role="pickup-block">
+      <button type="button" data-action="pick" class="text-sm underline text-[#8A6E52] hover:text-[#5C4430]"></button>
+      <p class="text-sm text-[#5C4430] mt-1" data-role="point"></p>
+    </div>
+
+    <div class="mt-4 text-sm text-[#5C4430]" data-role="summary"></div>
+
+    <label class="flex items-start gap-2 mt-4 text-sm text-[#8A6E52] cursor-pointer" for="${consentId}">
+      <input type="checkbox" id="${consentId}" data-action="consent" class="mt-0.5 accent-[#AD8A54]" />
+      <span>
+        <span>${t("shop.consentLabel", lang)}</span>
+        <a href="terms.html" class="underline hover:text-[#5C4430]">${t("shop.consentLink", lang)}</a>
+      </span>
+    </label>
+
+    <button type="button" data-action="buy" class="mt-4 w-full py-3 rounded-full text-sm tracking-wide uppercase transition-colors"></button>
+    <p class="text-xs text-[#8A6E52] mt-2 min-h-[1rem]" data-role="hint" aria-live="polite"></p>
+  `;
+}
+
+// Product page (product.html?id=...): photos, description and the whole purchase flow.
+function renderProductPage(lang) {
+  const container = document.getElementById("product-detail");
+  if (!container || !SHIPPING) return;
+
+  const id = new URLSearchParams(window.location.search).get("id");
+  const product = PRODUCTS.find((p) => p.id === id);
+  if (!product) {
+    container.innerHTML = `<p class="text-[#8A6E52]">${t("shop.notFound", lang)}</p>`;
+    return;
+  }
+
+  const copy = translations[lang].products[product.id];
+  document.title = `${copy.name} \u2014 Grunndubh`;
+  const thumbs =
+    product.images.length > 1
+      ? `<div class="flex gap-3 mt-3">${product.images
+          .map(
+            (src, i) =>
+              `<button type="button" data-action="thumb" data-src="${src}" aria-label="${copy.name} ${i + 1}" class="w-16 h-20 overflow-hidden rounded-lg bg-[#F0E8D9]"><img src="${src}" alt="" class="w-full h-full object-cover" /></button>`
+          )
+          .join("")}</div>`
+      : "";
+
+  container.innerHTML = `
+    <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
+      <div data-animate>
+        <div class="relative aspect-[4/5] overflow-hidden rounded-2xl bg-[#F0E8D9] shadow-sm" data-role="main-image">
+          ${photoHtml(product.images[0], copy.name)}
+        </div>
+        ${thumbs}
+      </div>
+      <div data-animate>
+        <div class="flex items-center gap-2">
+          <span class="w-1.5 h-1.5 rounded-full" style="background-color:${STATUS_COLORS[product.status]}"></span>
+          <span class="text-xs tracking-[0.15em] uppercase text-[#5C4430]">${t(`shop.status.${product.status}`, lang)}</span>
+        </div>
+        <h1 class="font-serif text-4xl text-[#3B2B1E] mt-2">${copy.name}</h1>
+        <p class="text-[#8A6E52] mt-3 leading-relaxed">${copy.description}</p>
+        <p class="text-[#5C4430] text-xl mt-4">${priceLabelFor(product, lang)}</p>
+        <div class="mt-8 max-w-md" data-product="${product.id}">${purchaseBlock(product, lang)}</div>
+      </div>
+    </div>
+  `;
+  container.querySelectorAll("[data-product]").forEach(syncCard);
 }
 
 // Delivery prices come from assets/shipping.json (also used by the server).
@@ -258,10 +298,10 @@ async function startCheckout(card) {
 }
 
 function initShopEvents() {
-  const grid = document.getElementById("shop-grid");
-  if (!grid) return;
+  const root = document.getElementById("product-detail");
+  if (!root) return;
 
-  grid.addEventListener("change", (event) => {
+  root.addEventListener("change", (event) => {
     const card = event.target.closest("[data-product]");
     const action = event.target.getAttribute("data-action");
     if (!card || !action) return;
@@ -270,18 +310,28 @@ function initShopEvents() {
     else if (action === "country") {
       state.country = event.target.value;
       if (state.point && state.point.country !== state.country.toLowerCase()) state.point = null;
-    }
-    else if (action === "method") state.method = event.target.value;
+    } else if (action === "method") state.method = event.target.value;
     else return;
     state.message = "";
     syncCard(card);
   });
 
-  grid.addEventListener("click", (event) => {
+  root.addEventListener("click", (event) => {
     const button = event.target.closest("[data-action]");
-    const card = event.target.closest("[data-product]");
-    if (!button || !card) return;
+    if (!button) return;
     const action = button.getAttribute("data-action");
+
+    if (action === "thumb") {
+      const holder = root.querySelector('[data-role="main-image"]');
+      const img = holder.querySelector("img");
+      img.style.display = "";
+      img.nextElementSibling.style.display = "none";
+      img.src = button.getAttribute("data-src");
+      return;
+    }
+
+    const card = event.target.closest("[data-product]");
+    if (!card) return;
     if (action === "pick") pickPoint(card);
     if (action === "buy" && !button.disabled) startCheckout(card);
   });
@@ -390,15 +440,18 @@ document.addEventListener("DOMContentLoaded", () => {
   initNewsletterForm();
   initContactForm();
   applyLang(getLang());
-  loadShipping().then(() => {
-    renderProducts(getLang());
-    initScrollAnimations();
-  });
+  if (document.getElementById("product-detail")) {
+    loadShipping().then(() => {
+      renderProductPage(getLang());
+      initScrollAnimations();
+    });
+  }
   initScrollAnimations();
 });
 
 document.addEventListener("langchange", (event) => {
   renderProducts(event.detail.lang);
+  renderProductPage(event.detail.lang);
   // Re-observe any freshly rendered product cards for the scroll-in effect.
   initScrollAnimations();
 });

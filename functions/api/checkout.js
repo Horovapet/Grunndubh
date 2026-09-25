@@ -96,7 +96,7 @@ export async function onRequestPost({ request, env }) {
   add("mode", "payment");
   add("locale", lang === "cz" ? "cs" : "en");
   add("success_url", `${origin}/success.html?session_id={CHECKOUT_SESSION_ID}`);
-  add("cancel_url", `${origin}/index.html#shop`);
+  add("cancel_url", `${origin}/product.html?id=${encodeURIComponent(body.productId)}`);
   add("phone_number_collection[enabled]", "true");
   add("custom_text[submit][message]", text.submit);
 

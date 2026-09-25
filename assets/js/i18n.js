@@ -60,6 +60,9 @@ const translations = {
         widgetError: "The pickup point map could not be loaded. Please try again.",
       },
       priceComingSoon: "Price coming soon",
+      view: "View",
+      back: "Back to the collection",
+      notFound: "We could not find that piece.",
       consentLabel: "I agree to the",
       consentLink: "Terms & Conditions",
       status: {
@@ -390,6 +393,9 @@ const translations = {
         widgetError: "Mapu v\u00fddejn\u00edch m\u00edst se nepoda\u0159ilo na\u010d\u00edst. Zkuste to pros\u00edm znovu.",
       },
       priceComingSoon: "Cena bude brzy",
+      view: "Zobrazit",
+      back: "Zp\u011bt ke kolekci",
+      notFound: "Tuto n\u00e1u\u0161nici jsme nena\u0161li.",
       consentLabel: "Souhlas\u00edm s",
       consentLink: "obchodn\u00edmi podm\u00ednkami",
       status: {
@@ -676,10 +682,10 @@ const translations = {
 const PRODUCTS = [
   // "speckled-ivory" temporarily removed \u2014 no product photo yet.
   // Re-add once a photo exists at assets/images/product-speckled-ivory.jpg:
-  // { id: "speckled-ivory", image: "assets/images/product-speckled-ivory.jpg", price_czk: null, price_eur: null, status: "in-stock" },
+  // { id: "speckled-ivory", images: ["assets/images/product-speckled-ivory.jpg"], price_czk: null, price_eur: null, status: "in-stock" },
   {
     id: "obsidian",
-    image: "assets/images/product-obsidian.png",
+    images: ["assets/images/product-obsidian.png"], // first = main photo; add more for the gallery
     price_czk: 420,
     price_eur: 18,
     status: "in-stock",

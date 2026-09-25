@@ -99,7 +99,9 @@ project settings once you have one.
 
 ## Checkout (Stripe + Packeta)
 
-- Card flow: consent checkbox -> Packeta pickup-point map -> "Order with obligation to pay" -> Stripe Checkout.
+- The home page only shows photo, name and short text per piece; each card opens `product.html?id=<id>`,
+  which has the photos and the whole purchase flow. Extra photos: add them to `images` in `PRODUCTS`.
+- Purchase flow: consent checkbox -> Packeta pickup-point map -> "Order with obligation to pay" -> Stripe Checkout.
   Currency follows the language toggle (CZ = CZK, EN = EUR).
 - `functions/api/checkout.js` is a Cloudflare Pages Function (`POST /api/checkout`). It holds the real product
   prices (`PRODUCTS`) and reads shipping from the JSON and creates the Stripe session. Prices are also shown from
