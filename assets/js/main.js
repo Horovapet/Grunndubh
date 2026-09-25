@@ -111,16 +111,15 @@ const money = (n, cur) => Number(n).toLocaleString("cs-CZ") + "\u00a0" + (cur ==
 
 function availableMethods(country) {
   if (country === SHIPPING.domestic.country) return SHIPPING.domestic.methods;
-  const zone = SHIPPING.eu.zones.find((z) => z.countries.includes(country));
-  return zone ? [{ id: SHIPPING.eu.id, pickup: false, czk: zone.czk, eur: zone.eur }] : [];
+  const price = SHIPPING.eu.countries[country];
+  return price ? [{ id: SHIPPING.eu.id, pickup: false, czk: price.czk, eur: price.eur }] : [];
 }
 
 function countryOptions(lang, selected) {
   const locale = lang === "cz" ? "cs" : "en";
   const names = new Intl.DisplayNames([locale], { type: "region" });
   const home = SHIPPING.domestic.country;
-  const others = SHIPPING.eu.zones
-    .flatMap((z) => z.countries)
+  const others = Object.keys(SHIPPING.eu.countries)
     .sort((a, b) => names.of(a).localeCompare(names.of(b), locale));
   return [home, ...others]
     .map((code) => `<option value="${code}"${code === selected ? " selected" : ""}>${names.of(code)}</option>`)

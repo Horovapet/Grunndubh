@@ -109,8 +109,8 @@ project settings once you have one.
 - The pickup point and terms acceptance are saved as metadata on the Stripe payment, so you can create the
   Packeta parcel from it. Turn on customer receipts in Stripe (Settings -> Emails).
 - Delivery prices live in `assets/shipping.json` (used by both the storefront and the function): three options
-  in the Czech Republic (Packeta pickup point, Ceska posta, PPL) and one EU option in three price zones.
-  Malta is not in the list yet. Packeta pickup points are offered for CZ only (`PACKETA_COUNTRIES` in
+  in the Czech Republic (Packeta pickup point, Ceska posta, PPL) and one EU option with a price per country
+  (Packeta home delivery x 1.21 VAT, see the note in the JSON). Malta and Cyprus are not offered. Packeta pickup points are offered for CZ only (`PACKETA_COUNTRIES` in
   `assets/js/config.js`). Ceska posta, PPL and EU delivery collect the address on the Stripe page.
 
 ## Placeholders still needed before this goes live

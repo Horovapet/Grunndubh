@@ -2,17 +2,126 @@
   "domestic": {
     "country": "CZ",
     "methods": [
-      { "id": "packeta-point", "pickup": true, "czk": 89, "eur": 4 },
-      { "id": "ceska-posta", "pickup": false, "czk": 139, "eur": 6 },
-      { "id": "ppl", "pickup": false, "czk": 189, "eur": 8 }
+      {
+        "id": "packeta-point",
+        "pickup": true,
+        "czk": 89,
+        "eur": 4
+      },
+      {
+        "id": "ceska-posta",
+        "pickup": false,
+        "czk": 139,
+        "eur": 6
+      },
+      {
+        "id": "ppl",
+        "pickup": false,
+        "czk": 189,
+        "eur": 8
+      }
     ]
   },
   "eu": {
     "id": "eu-home",
-    "zones": [
-      { "czk": 149, "eur": 6, "countries": ["PL", "SK", "HU", "HR", "RO", "BG", "SI"] },
-      { "czk": 269, "eur": 11, "countries": ["DE", "GR", "LT", "LV", "IT", "FR", "ES", "PT", "CY", "EE", "AT"] },
-      { "czk": 449, "eur": 18, "countries": ["NL", "BE", "FI", "SE", "DK", "IE", "LU"] }
-    ]
-  }
+    "countries": {
+      "AT": {
+        "czk": 250,
+        "eur": 10
+      },
+      "BE": {
+        "czk": 280,
+        "eur": 12
+      },
+      "BG": {
+        "czk": 160,
+        "eur": 7
+      },
+      "DE": {
+        "czk": 190,
+        "eur": 8
+      },
+      "DK": {
+        "czk": 390,
+        "eur": 16
+      },
+      "EE": {
+        "czk": 280,
+        "eur": 12
+      },
+      "ES": {
+        "czk": 230,
+        "eur": 10
+      },
+      "FI": {
+        "czk": 540,
+        "eur": 22
+      },
+      "FR": {
+        "czk": 230,
+        "eur": 10
+      },
+      "GR": {
+        "czk": 180,
+        "eur": 8
+      },
+      "HR": {
+        "czk": 160,
+        "eur": 7
+      },
+      "HU": {
+        "czk": 160,
+        "eur": 7
+      },
+      "IE": {
+        "czk": 370,
+        "eur": 15
+      },
+      "IT": {
+        "czk": 210,
+        "eur": 9
+      },
+      "LT": {
+        "czk": 200,
+        "eur": 8
+      },
+      "LU": {
+        "czk": 420,
+        "eur": 17
+      },
+      "LV": {
+        "czk": 250,
+        "eur": 10
+      },
+      "NL": {
+        "czk": 270,
+        "eur": 11
+      },
+      "PL": {
+        "czk": 150,
+        "eur": 6
+      },
+      "PT": {
+        "czk": 230,
+        "eur": 10
+      },
+      "RO": {
+        "czk": 130,
+        "eur": 6
+      },
+      "SE": {
+        "czk": 540,
+        "eur": 22
+      },
+      "SI": {
+        "czk": 150,
+        "eur": 6
+      },
+      "SK": {
+        "czk": 120,
+        "eur": 5
+      }
+    }
+  },
+  "note": "EU prices = cheapest Packeta home delivery for a light parcel (price list of 25.9.2026) x 1.21 VAT (seller is not a VAT payer), rounded up to 10 CZK; EUR = CZK / 25 rounded up. Malta and Cyprus are not offered (Packeta has no home delivery there)."
 }

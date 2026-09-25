@@ -22,8 +22,8 @@ function resolveShipping(country, methodId) {
     return method ? { id: method.id, pickup: method.pickup, czk: method.czk, eur: method.eur } : null;
   }
   if (methodId !== shipping.eu.id) return null;
-  const zone = shipping.eu.zones.find((z) => z.countries.includes(country));
-  return zone ? { id: shipping.eu.id, pickup: false, czk: zone.czk, eur: zone.eur } : null;
+  const price = shipping.eu.countries[country];
+  return price ? { id: shipping.eu.id, pickup: false, czk: price.czk, eur: price.eur } : null;
 }
 
 const SHIPPING_NAMES = {
