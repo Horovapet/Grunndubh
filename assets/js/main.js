@@ -22,7 +22,12 @@ function renderProducts(lang) {
     const copy = translations[lang].products[product.id];
     const statusLabel = t(`shop.status.${product.status}`, lang);
     const statusColor = STATUS_COLORS[product.status];
-    const priceLabel = product.price || t("shop.priceComingSoon", lang);
+    const fmt = (n) => Number(n).toLocaleString("cs-CZ");
+    const prices = [
+      product.price_czk ? `${fmt(product.price_czk)} Kč` : null,
+      product.price_eur ? `${fmt(product.price_eur)} €` : null,
+    ].filter(Boolean);
+    const priceLabel = prices.length ? prices.join(" / ") : t("shop.priceComingSoon", lang);
     const consentId = `consent-${product.id}`;
 
     return `
@@ -64,6 +69,9 @@ function renderProducts(lang) {
           - Require the consent checkbox above to be checked before proceeding.
           - Replace the disabled attribute + click handler stub below with
             a call into the Stripe Checkout / Payment flow, passing product.id.
+          - Use the fixed product.price_czk / product.price_eur amounts as
+            separate Stripe prices (one per currency), not a live conversion.
+          - Shipping is via Packeta: add its pickup-point widget before payment.
         -->
         <button
           type="button"

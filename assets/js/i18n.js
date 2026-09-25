@@ -182,7 +182,7 @@ const translations = {
           "4.6 The Seller may offset any claim for damage to the goods against the Buyer's refund claim.",
           "4.7 The Seller may withdraw from the contract at any time before the Buyer receives the goods, in particular if stock has been exhausted, and will refund the price without undue delay.",
           "## 5. Shipping and delivery",
-          "5.1 Goods are delivered within the European Union via [carrier \u2014 to be confirmed]. The delivery method and estimated timeframe are shown when the order is placed.",
+          "5.1 Goods are delivered within the European Union via Packeta. The delivery method and estimated timeframe are shown when the order is placed.",
           "5.2 If a delivery method is agreed at the Buyer's specific request, the Buyer bears the risk and any related additional costs.",
           "5.3 The Buyer must accept the goods on delivery. Where re-delivery or a different delivery method becomes necessary for reasons on the Buyer's side, the Buyer bears the related costs.",
           "5.4 On receiving the goods from the carrier, the Buyer must check the packaging is intact and report any damage to the carrier without delay. This does not affect the Buyer's rights arising from defective performance.",
@@ -255,7 +255,7 @@ const translations = {
           "3.6 Providing the personal data needed to conclude and perform the purchase contract is a contractual requirement \u2014 without it, the order cannot be fulfilled. Providing an e-mail address for the newsletter is entirely voluntary.",
           "## 4. Who we share personal data with",
           "4.1 Stripe, our payment service provider, for payment processing.",
-          "4.2 The carrier delivering the goods [to be confirmed once selected], to the extent needed to deliver the parcel.",
+          "4.2 The carrier delivering the goods Packeta, to the extent needed to deliver the parcel.",
           "4.3 The Controller's accountant or tax adviser, where necessary to meet statutory obligations.",
           "4.4 The provider hosting the website's infrastructure Cloudflare, Inc..",
           "4.5 Personal data is not shared with any other third parties, nor sold for third-party marketing purposes.",
@@ -470,7 +470,7 @@ const translations = {
           "4.6 N\u00e1rok na n\u00e1hradu \u0161kody vznikl\u00e9 na zbo\u017e\u00ed je prod\u00e1vaj\u00edc\u00ed opr\u00e1vn\u011bn jednostrann\u011b zapo\u010d\u00edst proti n\u00e1roku kupuj\u00edc\u00edho na vr\u00e1cen\u00ed kupn\u00ed ceny.",
           "4.7 Prod\u00e1vaj\u00edc\u00ed je opr\u00e1vn\u011bn od kupn\u00ed smlouvy odstoupit kdykoliv do doby p\u0159evzet\u00ed zbo\u017e\u00ed kupuj\u00edc\u00edm, zejm\u00e9na v p\u0159\u00edpad\u011b vy\u010derp\u00e1n\u00ed z\u00e1sob. V takov\u00e9m p\u0159\u00edpad\u011b vr\u00e1t\u00ed kupuj\u00edc\u00edmu kupn\u00ed cenu bez zbyte\u010dn\u00e9ho odkladu.",
           "## 5. P\u0158EPRAVA A DOD\u00c1N\u00cd ZBO\u017d\u00cd",
-          "5.1 Zbo\u017e\u00ed je doru\u010dov\u00e1no v r\u00e1mci Evropsk\u00e9 unie prost\u0159ednictv\u00edm p\u0159epravce [doplnit po v\u00fdb\u011bru dopravce]. Zp\u016fsob a p\u0159edpokl\u00e1dan\u00e1 doba dod\u00e1n\u00ed jsou kupuj\u00edc\u00edmu zobrazeny p\u0159i dokon\u010dov\u00e1n\u00ed objedn\u00e1vky.",
+          "5.1 Zbo\u017e\u00ed je doru\u010dov\u00e1no v r\u00e1mci Evropsk\u00e9 unie prost\u0159ednictv\u00edm p\u0159epravce Packeta. Zp\u016fsob a p\u0159edpokl\u00e1dan\u00e1 doba dod\u00e1n\u00ed jsou kupuj\u00edc\u00edmu zobrazeny p\u0159i dokon\u010dov\u00e1n\u00ed objedn\u00e1vky.",
           "5.2 Je-li zp\u016fsob dopravy sjedn\u00e1n na z\u00e1klad\u011b zvl\u00e1\u0161tn\u00edho po\u017eadavku kupuj\u00edc\u00edho, nese kupuj\u00edc\u00ed riziko a p\u0159\u00edpadn\u00e9 dodate\u010dn\u00e9 n\u00e1klady s t\u00edmto zp\u016fsobem spojen\u00e9.",
           "5.3 Kupuj\u00edc\u00ed je povinen zbo\u017e\u00ed p\u0159i dod\u00e1n\u00ed p\u0159evz\u00edt. Vy\u017eaduje-li si z d\u016fvod\u016f na stran\u011b kupuj\u00edc\u00edho opakovan\u00e9 doru\u010den\u00ed nebo doru\u010den\u00ed jin\u00fdm zp\u016fsobem, ne\u017e bylo v objedn\u00e1vce uvedeno, je kupuj\u00edc\u00ed povinen uhradit n\u00e1klady s t\u00edm spojen\u00e9.",
           "5.4 P\u0159i p\u0159evzet\u00ed zbo\u017e\u00ed od p\u0159epravce je kupuj\u00edc\u00ed povinen zkontrolovat neporu\u0161enost obalu a p\u0159\u00edpadn\u00e9 z\u00e1vady neprodlen\u011b ozn\u00e1mit p\u0159epravci. T\u00edm nejsou dot\u010dena pr\u00e1va kupuj\u00edc\u00edho z vadn\u00e9ho pln\u011bn\u00ed.",
@@ -542,7 +542,7 @@ const translations = {
           "3.6 Poskytnut\u00ed osobn\u00edch \u00fadaj\u016f nutn\u00fdch k uzav\u0159en\u00ed a pln\u011bn\u00ed kupn\u00ed smlouvy je smluvn\u00edm po\u017eadavkem; bez jejich poskytnut\u00ed nelze objedn\u00e1vku vy\u0159\u00eddit. Poskytnut\u00ed e-mailu pro newsletter je \u010dist\u011b dobrovoln\u00e9.",
           "## 4. Komu osobn\u00ed \u00fadaje p\u0159ed\u00e1v\u00e1me",
           "4.1 Poskytovateli platebn\u00edch slu\u017eeb Stripe za \u00fa\u010delem zpracov\u00e1n\u00ed plateb.",
-          "4.2 P\u0159epravci zaji\u0161\u0165uj\u00edc\u00edmu doru\u010den\u00ed zbo\u017e\u00ed [doplnit po v\u00fdb\u011bru dopravce], v rozsahu nutn\u00e9m pro doru\u010den\u00ed z\u00e1silky.",
+          "4.2 P\u0159epravci zaji\u0161\u0165uj\u00edc\u00edmu doru\u010den\u00ed zbo\u017e\u00ed Packeta, v rozsahu nutn\u00e9m pro doru\u010den\u00ed z\u00e1silky.",
           "4.3 P\u0159\u00edpadn\u011b \u00fa\u010detn\u00ed/da\u0148ov\u00e9 poradkyni spr\u00e1vce, je-li to nutn\u00e9 pro spln\u011bn\u00ed z\u00e1konn\u00fdch povinnost\u00ed.",
           "4.4 Poskytovateli webhostingu, na jeho\u017e infrastruktu\u0159e je webov\u00e1 str\u00e1nka provozov\u00e1na Cloudflare, Inc..",
           "4.5 Osobn\u00ed \u00fadaje nejsou p\u0159ed\u00e1v\u00e1ny \u017e\u00e1dn\u00fdm dal\u0161\u00edm t\u0159et\u00edm osob\u00e1m ani prod\u00e1v\u00e1ny pro marketingov\u00e9 \u00fa\u010dely t\u0159et\u00edch stran.",
@@ -588,16 +588,18 @@ const translations = {
  * Product data \u2014 deliberately flat and framework-agnostic so it's
  * trivial to wire up to Stripe (or any checkout) later.
  * status: "in-stock" | "made-to-order" | "sold-out"
- * price: fill in as a plain string (e.g. "1 200 K\u010d") once pricing is set.
+ * price_czk / price_eur: fixed amounts as plain numbers (e.g. 420, 17). Set both
+ * to the real Stripe prices; a null/0 value is simply not shown on the card.
  */
 const PRODUCTS = [
   // "speckled-ivory" temporarily removed \u2014 no product photo yet.
   // Re-add once a photo exists at assets/images/product-speckled-ivory.jpg:
-  // { id: "speckled-ivory", image: "assets/images/product-speckled-ivory.jpg", price: null, status: "in-stock" },
+  // { id: "speckled-ivory", image: "assets/images/product-speckled-ivory.jpg", price_czk: null, price_eur: null, status: "in-stock" },
   {
     id: "obsidian",
     image: "assets/images/product-obsidian.png",
-    price: "420 K\u010d",
+    price_czk: 420,
+    price_eur: null, // TODO: fill in the fixed EUR price
     status: "made-to-order",
   },
 ];

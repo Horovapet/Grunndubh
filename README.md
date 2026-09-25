@@ -104,14 +104,15 @@ project settings once you have one.
   - `assets/images/hero.jpg`
   - `assets/images/product-speckled-ivory.jpg`
   - `assets/images/product-obsidian.jpg`
-- **Prices** — set `price` on each product in `assets/js/i18n.js`
-  (`PRODUCTS` array) — currently `null`, which renders as "Price coming
-  soon".
+- **Prices** — each product in `assets/js/i18n.js` (`PRODUCTS`) has fixed `price_czk` and `price_eur`
+  (Obsidian: CZK 420 set, EUR still `null`; a null price is simply hidden on the card).
 - **Czech translations** — every string prefixed `[CZ]` in
   `assets/js/i18n.js` needs real copy (returns/refunds are already done).
 - **Terms & Conditions / Privacy Policy** — `terms.html` and `privacy.html`
   are visible legal placeholders only. Do not launch checkout until a
   lawyer-reviewed version replaces them.
+- **Packeta** — carrier is named in Terms 5.1 / Privacy 4.2. The pickup-point widget key is kept in the
+  gitignored `.env.local` (repo is public); wire the widget in when building checkout.
 - **Stripe checkout** — every "Buy" button is disabled on purpose. See the
   `TODO(stripe)` comments in `index.html` and `assets/js/main.js`.
 - **Newsletter/contact form backends** — both forms are front-end only
