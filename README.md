@@ -111,8 +111,7 @@ project settings once you have one.
 - **Terms & Conditions / Privacy Policy** — `terms.html` and `privacy.html`
   are visible legal placeholders only. Do not launch checkout until a
   lawyer-reviewed version replaces them.
-- **Packeta** — carrier is named in Terms 5.1 / Privacy 4.2. The pickup-point widget key is kept in the
-  gitignored `.env.local` (repo is public); wire the widget in when building checkout.
+- **Packeta** — carrier is named in Terms 5.1 / Privacy 4.2. The public widget key is in `assets/js/config.js` (not yet loaded).
 - **Stripe checkout** — every "Buy" button is disabled on purpose. See the
   `TODO(stripe)` comments in `index.html` and `assets/js/main.js`.
 - **Newsletter/contact form backends** — both forms are front-end only
