@@ -35,10 +35,11 @@ const translations = {
       ship: {
         country: "Delivery country",
         methods: {
-          "packeta-point": "Packeta pickup point (Z-Point / Z-Box)",
+          "packeta-point": "Zásilkovna – pickup point",
+          "packeta-point-eu": "Z-Point / Z-Box",
           "ceska-posta": "\u010cesk\u00e1 po\u0161ta \u2013 to your address",
           ppl: "PPL \u2013 to your address",
-          "eu-home": "Packeta \u2013 to your address",
+          "eu-home": "Delivery to your address",
         },
         itemLabel: "Item",
         deliveryLabel: "Delivery",
@@ -353,10 +354,11 @@ const translations = {
       ship: {
         country: "Zem\u011b doru\u010den\u00ed",
         methods: {
-          "packeta-point": "V\u00fddejn\u00ed m\u00edsto Z\u00e1silkovny (Z-Point / Z-Box)",
+          "packeta-point": "Z\u00e1silkovna \u2013 v\u00fddejn\u00ed m\u00edsto",
+          "packeta-point-eu": "Z-Point / Z-Box",
           "ceska-posta": "\u010cesk\u00e1 po\u0161ta \u2013 na adresu",
           ppl: "PPL \u2013 na adresu",
-          "eu-home": "Z\u00e1silkovna (Packeta) \u2013 na adresu",
+          "eu-home": "Doru\u010den\u00ed na adresu",
         },
         itemLabel: "Zbo\u017e\u00ed",
         deliveryLabel: "Doprava",

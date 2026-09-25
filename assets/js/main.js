@@ -146,7 +146,7 @@ function syncCard(card) {
       <label class="flex items-center justify-between gap-3 py-1 text-sm text-[#5C4430] cursor-pointer">
         <span class="flex items-center gap-2">
           <input type="radio" name="method-${id}" value="${m.id}" data-action="method" class="accent-[#AD8A54]"${m.id === state.method ? " checked" : ""} />
-          ${t("shop.ship.methods." + m.id, lang)}
+          ${t("shop.ship.methods." + (m.id === "packeta-point" && state.country !== SHIPPING.domestic.country ? "packeta-point-eu" : m.id), lang)}
         </span>
         <span class="text-[#8A6E52] whitespace-nowrap">${money(m[cur], cur)}</span>
       </label>`

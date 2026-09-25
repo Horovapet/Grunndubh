@@ -30,10 +30,11 @@ function resolveShipping(country, methodId) {
 }
 
 const SHIPPING_NAMES = {
-  "packeta-point": { cz: "Výdejní místo Zásilkovny (Z-Point / Z-Box)", en: "Packeta pickup point (Z-Point / Z-Box)" },
+  "packeta-point": { cz: "Zásilkovna – výdejní místo", en: "Zásilkovna – pickup point" },
+  "packeta-point-eu": { cz: "Z-Point / Z-Box", en: "Z-Point / Z-Box" },
   "ceska-posta": { cz: "Česká pošta", en: "Česká pošta" },
   ppl: { cz: "PPL", en: "PPL" },
-  "eu-home": { cz: "Zásilkovna (Packeta) – na adresu", en: "Packeta – to your address" },
+  "eu-home": { cz: "Doručení na adresu", en: "Delivery to your address" },
 };
 
 const TERMS_VERSION = "2026-09-18";
@@ -117,7 +118,7 @@ export async function onRequestPost({ request, env }) {
     add("line_items[1][quantity]", 1);
     add("line_items[1][price_data][currency]", currency);
     add("line_items[1][price_data][unit_amount]", ship[currency] * 100);
-    add("line_items[1][price_data][product_data][name]", `${text.shipping}: ${SHIPPING_NAMES[ship.id][lang]} (${country})`);
+    add("line_items[1][price_data][product_data][name]", `${text.shipping}: ${SHIPPING_NAMES[ship.id === "packeta-point" && country !== shipping.domestic.country ? "packeta-point-eu" : ship.id][lang]} (${country})`);
   }
 
   const metadata = {
