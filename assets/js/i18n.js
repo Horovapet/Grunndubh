@@ -715,7 +715,7 @@ const PRODUCTS = [
   // { id: "speckled-ivory", images: ["assets/images/product-speckled-ivory.jpg"], price_czk: null, price_eur: null, status: "in-stock" },
   {
     id: "obsidian",
-    images: ["assets/images/product-obsidian.png"], // first = main photo; add more for the gallery
+    images: ["assets/images/product-obsidian.jpg"], // first = main photo; add more for the gallery
     price_czk: 420,
     price_eur: 18,
     maxQty: 5, // keep in sync with maxQty in functions/api/checkout.js
